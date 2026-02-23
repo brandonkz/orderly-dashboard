@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BetSorted Content Dashboard</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0b1120; color: #e0e0e0; padding: 16px; max-width: 800px; margin: 0 auto; }
+h1 { color: #2563eb; font-size: 1.4em; margin-bottom: 4px; }
+.subtitle { color: #666; font-size: 0.85em; margin-bottom: 16px; }
+.nav { display: flex; gap: 8px; margin-bottom: 16px; }
+.nav a { color: #60a5fa; font-size: 0.8em; text-decoration: none; padding: 4px 10px; border: 1px solid #1e3a8a; border-radius: 6px; }
+.nav a:hover { background: #1e3a8a; }
+.stats { background: #111827; border: 1px solid #1e3a8a; border-radius: 10px; padding: 14px; margin-bottom: 20px; display: flex; gap: 20px; flex-wrap: wrap; }
+.stat { text-align: center; }
+.stat-num { font-size: 1.4em; font-weight: 700; color: #2563eb; }
+.stat-green .stat-num { color: #10b981; }
+.stat-label { font-size: 0.7em; color: #666; }
+.section-header { color: #2563eb; font-size: 1.1em; font-weight: 700; margin: 20px 0 10px; border-bottom: 1px solid #1e3a8a; padding-bottom: 6px; }
+.tweet-card { background: #111827; border: 1px solid #1e3a8a; border-radius: 10px; padding: 14px; margin-bottom: 10px; position: relative; transition: border-color 0.2s; }
+.tweet-card.posted { opacity: 0.4; border-color: #10b981; }
+.tweet-card:not(.posted):hover { border-color: #3b82f6; }
+.slot-label { color: #3b82f6; font-size: 0.75em; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.tweet-text { white-space: pre-wrap; font-size: 0.9em; line-height: 1.5; color: #d0d0d0; }
+.tweet-time { color: #555; font-size: 0.75em; margin-top: 4px; }
+.actions { display: flex; gap: 8px; margin-top: 10px; }
+.btn { padding: 6px 14px; border-radius: 6px; border: none; font-size: 0.8em; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.btn-copy { background: #2563eb; color: white; }
+.btn-copy:hover { background: #1d4ed8; }
+.btn-copy.copied { background: #10b981; }
+.btn-posted { background: transparent; border: 1px solid #333; color: #888; }
+.btn-posted:hover { border-color: #10b981; color: #10b981; }
+.btn-posted.is-posted { background: #10b981; color: white; border-color: #10b981; }
+.reply-section { margin-top: 30px; }
+.reply-section h2 { color: #2563eb; font-size: 1em; margin-bottom: 10px; }
+.reply-card { background: #111827; border: 1px solid #1e3a8a; border-radius: 10px; padding: 14px; margin-bottom: 10px; }
+.reply-trigger { color: #3b82f6; font-size: 0.8em; font-weight: 600; margin-bottom: 4px; }
+.data-box { background: #111827; border: 1px solid #1e3a8a; border-radius: 10px; padding: 14px; margin-bottom: 16px; }
+.data-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #0b1120; font-size: 0.85em; }
+.data-label { color: #888; }
+.data-value { color: #10b981; font-weight: 600; }
+.updated { color: #444; font-size: 0.7em; text-align: right; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+
+<h1>BetSorted Content Dashboard ⚽</h1>
+<p class="subtitle">Daily sports news tweets + SA alpha picks</p>
+<div class="nav">
+  <a href="index.html">Orderly</a>
+  <a href="tasks.html">Tasks</a>
+  <a href="betsorted.html">BetSorted</a>
+</div>
+
+<div class="updated" id="updated">Last updated: loading...</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-num" id="total">0</div><div class="stat-label">TODAY</div></div>
+  <div class="stat stat-green"><div class="stat-num" id="posted-count">0</div><div class="stat-label">POSTED</div></div>
+  <div class="stat"><div class="stat-num" id="remaining">0</div><div class="stat-label">REMAINING</div></div>
+</div>
+
+<div class="section-header">📊 Live Odds Snapshot</div>
+<div class="data-box" id="odds-data">Loading...</div>
+
+<div class="section-header">🐦 Today's Tweets</div>
+<div id="tweets">No tweets generated yet. The daily cron runs at 08:00 SAST.</div>
+
+<div class="reply-section">
+<h2>💬 Reply Templates</h2>
+<div id="replies"></div>
+</div>
+
+<script>
+// Tweets get injected by the daily cron — this is the initial/fallback data
+// The cron will update tweets.json which this page fetches
+const STORAGE_KEY = 'betsorted-dashboard';
+const fallbackTweets = [];
+
+const replies = [
+  { trigger: "When someone asks about best SA bookmaker", text: "Depends on the sport. Betway consistently offers 4% above average on EPL. Sportingbet is 6.1% above average on rugby. SupaBets wins on 4+ leg accas. There is no single best. Compare before you bet." },
+  { trigger: "When someone asks about odds comparison", text: "We track odds across every SA bookmaker in real time. The average gap between best and worst odds on the same match is 8.5%. That gap is money you are leaving on the table." },
+  { trigger: "When someone mentions a specific match", text: "Check the odds breakdown on BetSorted. We show you which bookmaker has the best price for that exact match. No signup needed." },
+  { trigger: "When someone asks about Betway", text: "Betway is the most consistent SA bookmaker for EPL odds. 4% above the market average on average. Their app is solid too. But always compare. They are not best on every market." },
+  { trigger: "When someone asks about prediction markets", text: "Prediction markets like Polymarket show where real money is flowing. Not opinions. Not pundits. Actual bets from thousands of people. We overlay that data on our odds comparison so you get the full picture." },
+  { trigger: "When someone complains about losing bets", text: "The average SA punter loses R180/month. Most of that is from taking worse odds than they need to. Same bet, different bookmaker, different return. That is the easiest fix in betting." },
+  { trigger: "When someone asks about value betting", text: "Value betting means finding odds that are higher than the true probability. If a team has a 50% chance of winning, any odds above 2.00 are value. We highlight the biggest value gaps daily." },
+  { trigger: "When PSL / Soweto Derby comes up", text: "PSL odds vary wildly between bookmakers. We have seen 15%+ gaps on derby matches. If you are betting on Chiefs vs Pirates without comparing, you are giving away money." },
+  { trigger: "When someone asks about rugby betting", text: "Sportingbet leads on rugby odds in SA. 6.1% above average on URC matches. For Springbok tests, the gap gets even wider because international bookmakers price differently to local ones." },
+  { trigger: "When someone mentions accumulators", text: "Accas multiply the odds gap. A 5% edge on one leg becomes 25%+ across a 5-leg acca. SupaBets and Betway tend to have the best acca odds in SA. Always compare before building your slip." }
+];
+
+async function loadTweets() {
+  try {
+    const res = await fetch('betsorted-tweets.json?' + Date.now());
+    if (res.ok) {
+      const data = await res.json();
+      return data;
+    }
+  } catch(e) {}
+  return null;
+}
+
+function getState() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; }
+}
+function saveState(s) { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); }
+
+function updateStats(tweets) {
+  const state = getState();
+  const today = new Date().toISOString().slice(0,10);
+  const postedCount = tweets.filter((t,i) => state[today + '-' + i]).length;
+  document.getElementById('total').textContent = tweets.length;
+  document.getElementById('posted-count').textContent = postedCount;
+  document.getElementById('remaining').textContent = tweets.length - postedCount;
+}
+
+function copyTweet(text, btn) {
+  navigator.clipboard.writeText(text);
+  btn.textContent = 'Copied!';
+  btn.classList.add('copied');
+  setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+}
+
+function togglePosted(idx) {
+  const state = getState();
+  const today = new Date().toISOString().slice(0,10);
+  const key = today + '-' + idx;
+  state[key] = !state[key];
+  saveState(state);
+  renderAll();
+}
+
+let currentTweets = [];
+let currentOdds = null;
+
+function renderAll() {
+  const state = getState();
+  const today = new Date().toISOString().slice(0,10);
+
+  // Tweets
+  if (currentTweets.length === 0) {
+    document.getElementById('tweets').innerHTML = '<div style="color:#555;padding:20px;text-align:center">No tweets yet today. The daily cron generates fresh content at 08:00 SAST.</div>';
+  } else {
+    const typeLabels = { movement: '📈 Odds Movement', alpha: '🎯 SA Alpha Pick', reaction: '📊 Match Reaction' };
+    document.getElementById('tweets').innerHTML = currentTweets.map((t, i) => {
+      const posted = state[today + '-' + i];
+      return `<div class="tweet-card ${posted ? 'posted' : ''}" id="tweet-${i}">
+        <div class="slot-label">${typeLabels[t.type] || t.type || 'Tweet'} ${t.scheduledTime ? '· ' + t.scheduledTime : ''}</div>
+        <div class="tweet-text">${t.text}</div>
+        <div class="actions">
+          <button class="btn btn-copy" onclick="copyTweet(currentTweets[${i}].text, this)">Copy</button>
+          <button class="btn btn-posted ${posted ? 'is-posted' : ''}" onclick="togglePosted(${i})">${posted ? '✓ Posted' : 'Mark Posted'}</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+  updateStats(currentTweets);
+
+  // Odds snapshot
+  if (currentOdds) {
+    const rows = currentOdds.map(o =>
+      `<div class="data-row"><div class="data-label">${o.label}</div><div class="data-value">${o.value}</div></div>`
+    ).join('');
+    document.getElementById('odds-data').innerHTML = rows;
+  } else {
+    document.getElementById('odds-data').innerHTML = `
+      <div class="data-row"><div class="data-label">Matches tracked</div><div class="data-value">37</div></div>
+      <div class="data-row"><div class="data-label">Avg odds gap</div><div class="data-value">8.5%</div></div>
+      <div class="data-row"><div class="data-label">Best SA bookmaker</div><div class="data-value">Betway (+4% EPL)</div></div>
+      <div class="data-row"><div class="data-label">Leagues</div><div class="data-value">EPL, UCL, Cricket</div></div>
+      <div class="data-row"><div class="data-label">API credits</div><div class="data-value">~390 remaining</div></div>
+    `;
+  }
+
+  // Replies
+  document.getElementById('replies').innerHTML = replies.map((r, i) => `
+    <div class="reply-card">
+      <div class="reply-trigger">${r.trigger}</div>
+      <div class="tweet-text">${r.text}</div>
+      <div class="actions"><button class="btn btn-copy" onclick="copyTweet(replies[${i}].text, this)">Copy</button></div>
+    </div>`).join('');
+}
+
+async function init() {
+  const data = await loadTweets();
+  if (data) {
+    currentTweets = data.tweets || [];
+    currentOdds = data.odds || null;
+    document.getElementById('updated').textContent = 'Last updated: ' + (data.updated || 'unknown');
+  } else {
+    document.getElementById('updated').textContent = 'Last updated: awaiting first cron run';
+  }
+  renderAll();
+}
+
+init();
+</script>
+</body>
+</html>
