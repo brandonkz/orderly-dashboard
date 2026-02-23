@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orderly Content Dashboard</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a1a; color: #e0e0e0; padding: 16px; max-width: 800px; margin: 0 auto; }
+h1 { color: #a78bfa; font-size: 1.4em; margin-bottom: 4px; }
+.subtitle { color: #666; font-size: 0.85em; margin-bottom: 20px; }
+.day { margin-bottom: 24px; }
+.day-header { color: #a78bfa; font-size: 1.1em; font-weight: 700; margin-bottom: 10px; border-bottom: 1px solid #1e1e3a; padding-bottom: 6px; }
+.tweet-card { background: #12122a; border: 1px solid #1e1e3a; border-radius: 10px; padding: 14px; margin-bottom: 10px; position: relative; transition: border-color 0.2s; }
+.tweet-card.posted { opacity: 0.4; border-color: #10b981; }
+.tweet-card:not(.posted):hover { border-color: #a78bfa; }
+.slot-label { color: #7c3aed; font-size: 0.75em; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.tweet-text { white-space: pre-wrap; font-size: 0.9em; line-height: 1.5; color: #d0d0d0; }
+.actions { display: flex; gap: 8px; margin-top: 10px; }
+.btn { padding: 6px 14px; border-radius: 6px; border: none; font-size: 0.8em; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.btn-copy { background: #7c3aed; color: white; }
+.btn-copy:hover { background: #6d28d9; }
+.btn-copy.copied { background: #10b981; }
+.btn-posted { background: transparent; border: 1px solid #333; color: #888; }
+.btn-posted:hover { border-color: #10b981; color: #10b981; }
+.btn-posted.is-posted { background: #10b981; color: white; border-color: #10b981; }
+.reply-section { margin-top: 30px; }
+.reply-section h2 { color: #a78bfa; font-size: 1em; margin-bottom: 10px; }
+.reply-card { background: #12122a; border: 1px solid #1e1e3a; border-radius: 10px; padding: 14px; margin-bottom: 10px; }
+.reply-trigger { color: #7c3aed; font-size: 0.8em; font-weight: 600; margin-bottom: 4px; }
+.stats { background: #12122a; border: 1px solid #1e1e3a; border-radius: 10px; padding: 14px; margin-bottom: 20px; display: flex; gap: 20px; flex-wrap: wrap; }
+.stat { text-align: center; }
+.stat-num { font-size: 1.4em; font-weight: 700; color: #a78bfa; }
+.stat-label { font-size: 0.7em; color: #666; }
+</style>
+</head>
+<body>
+
+<h1>Orderly Content Dashboard 💜</h1>
+<p class="subtitle">Week: Mon 24 Feb - Sun 2 Mar 2026</p>
+
+<div class="stats">
+  <div class="stat"><div class="stat-num" id="total">14</div><div class="stat-label">TOTAL</div></div>
+  <div class="stat"><div class="stat-num" id="remaining">14</div><div class="stat-label">REMAINING</div></div>
+  <div class="stat"><div class="stat-num" id="posted-count">0</div><div class="stat-label">POSTED</div></div>
+</div>
+
+<div id="content"></div>
+
+<div class="reply-section">
+<h2>Reply Templates (copy when needed)</h2>
+<div id="replies"></div>
+</div>
+
+<script>
+const tweets = [
+  { day: "Monday 24 Feb", slot: "Morning - Orderly One Hook", text: `You do not need a dev team to launch a perp DEX.\n\nOrderly One gives you:\n\n98 trading pairs.\nShared liquidity from day one.\nStock perps (NVDA, TSLA, AAPL).\nYour fees. Your brand.\n\n$1,000 for a broker code. 25% off with $ORDER.\n\n263 teams already launched.` },
+  { day: "Monday 24 Feb", slot: "Afternoon - DEX Spotlight: WOOFi Pro", text: `DEX Spotlight: @WOOFiPro\n\nBuilt on Orderly. Plugged into the shared orderbook.\n\nWOOFi did not build a matching engine. They built a frontend.\n\nSame liquidity as every other Orderly DEX. Their brand. Their fees.\n\nThat is the model. Build what you are good at. Let Orderly handle the rest.` },
+  { day: "Tuesday 25 Feb", slot: "Morning - Shared Orderbook Explainer", text: `What is a shared orderbook?\n\nEvery DEX on Orderly fills against the same book.\n\nYour Solana trader and your Arbitrum trader get the same depth. Same price. Same fills.\n\nNo fragmented liquidity. No cold start problem.\n\nThis is why 263 DEXs chose Orderly over building their own.` },
+  { day: "Tuesday 25 Feb", slot: "Afternoon - Referral Program CTA", text: `Refer traders to Orderly. Earn rewards. No cap.\n\nHow it works:\n1. Get your referral link\n2. Share it\n3. Earn on every trade they make\n\nNo minimum. No expiry. Just volume.` },
+  { day: "Wednesday 26 Feb", slot: "Morning - Social Proof", text: `263 DEXs launched on Orderly.\n\nNot 263 signups.\nNot 263 waitlist entries.\n\n263 live, trading DEXs.\n\nFrom wallet apps to AI agents to DeFi protocols. All sharing one orderbook.\n\nThe cold start problem is solved. The question now is: what will you build on top?` },
+  { day: "Wednesday 26 Feb", slot: "Afternoon - Ecosystem Milestone", text: `Orderly Network this week:\n\n$200M in 7-day volume.\n$1.8B in 30-day volume.\n$73B year to date.\n$185B all-time.\n\n263 active DEXs. 98 trading pairs. 18+ chains.\n\nClosing in on $200B. Quietly.` },
+  { day: "Thursday 27 Feb", slot: "Morning - Refer-a-DEX", text: `Know someone who should launch a perp DEX?\n\nRefer-a-DEX: earn rewards for every team that launches on Orderly through your link.\n\nKOLs. DAO leaders. Community builders. Developers.\n\nIf they can run a community, they can run a DEX.\n\nYou get paid for making the intro.` },
+  { day: "Thursday 27 Feb", slot: "Afternoon - Objection Buster", text: `"But I am not a developer."\n\nGood.\n\nOrderly One is built for non-developers.\n\nTraders who want their own platform.\nCommunities that want to earn fees.\nKOLs who want more than affiliate commissions.\n\nNo code. No servers. No liquidity bootstrapping.\n\n$1,000 broker code. 25% off with $ORDER. Live in minutes.` },
+  { day: "Friday 28 Feb", slot: "Morning - DEX Spotlight: Sharpe AI", text: `DEX Spotlight: @SharpeSignals\n\nAI-native trading on Orderly infrastructure.\n\nSharpe built their own interface. Their own algo tools. Their own community.\n\nThe orderbook, liquidity, and settlement? That is Orderly.\n\nAI agents + shared liquidity. This is where DeFi is going.` },
+  { day: "Friday 28 Feb", slot: "Afternoon - Referral Maths", text: `Quick maths on the referral program:\n\nRefer 10 traders who do $100K/month each.\nThat is $1M in monthly volume from your link.\n\nAt standard referral rates, that is real recurring income. No cap.\n\nYour link. Your network. Your upside.` },
+  { day: "Saturday 1 Mar", slot: "Morning - Community Poll", text: `Quick one.\n\nIf you could trade any asset as a perp on Orderly, what would you add?\n\nDrop it below. We read every reply.\n\n(Stock perps already live: NVDA, TSLA, AAPL, GOOGL, META, AMZN, MSFT, SPY, QQQ)` },
+  { day: "Saturday 1 Mar", slot: "Afternoon - Refer-a-DEX Reminder", text: `Weekend reminder: you can earn rewards for every DEX that launches on Orderly through your referral.\n\nNot traders. Entire DEXs.\n\nOne good intro to a builder, a DAO, or a community leader could be worth more than months of trading referrals.` },
+  { day: "Sunday 2 Mar", slot: "Morning - Mini Spotlight", text: `263 DEXs on Orderly.\n\nHere are 5 you may not know:\n\n@voabordefi\n@AskJimmy\n@FunlAI\n@alphanaut\n@PindeXYZ\n\nSame liquidity. Different audiences. That is the point.` },
+  { day: "Sunday 2 Mar", slot: "Afternoon - Week Tease", text: `Monday we drop fresh builder data. Volume leaderboards. Growth stories.\n\n263 DEXs and counting. The next one might be yours.` }
+];
+
+const replies = [
+  { trigger: "When someone asks about launching a DEX", text: `Orderly One. No code. Shared orderbook. 98 pairs including stock perps. Live in minutes. $1,000 broker code, 25% off with $ORDER.` },
+  { trigger: "When someone tweets about fragmented liquidity", text: `This is why Orderly built a shared orderbook. 263 DEXs, one book. Your Solana trader fills against the same depth as your Arbitrum trader.` },
+  { trigger: "When someone tweets about AI trading agents", text: `Orderly has an MCP server. AI assistants like Claude can build, trade, and manage perp DEXs through natural language. Full orderbook access, algo orders, multi-chain support.` },
+  { trigger: "When someone asks about stock perps", text: `NVDA, TSLA, AAPL, GOOGL, META, AMZN, MSFT, SPY, QQQ. All live on Orderly. Onchain. No KYC. No market hours. Settled in USDC.` },
+  { trigger: "When someone mentions Hyperliquid", text: `Different model. HL is one DEX. Orderly powers 263. Builders keep their brand, their fees, and plug into shared liquidity. Infra layer vs application layer.` },
+  { trigger: "When someone complains about CEX", text: `98 perp pairs on Orderly. Zero KYC. Onchain settlement. Your keys, your position.` }
+];
+
+const STORAGE_KEY = 'orderly-dashboard-2026-02-24';
+
+function getState() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; }
+}
+
+function saveState(state) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function updateStats() {
+  const state = getState();
+  const postedCount = Object.values(state).filter(Boolean).length;
+  document.getElementById('posted-count').textContent = postedCount;
+  document.getElementById('remaining').textContent = tweets.length - postedCount;
+}
+
+function render() {
+  const container = document.getElementById('content');
+  const state = getState();
+  let currentDay = '';
+  let html = '';
+
+  tweets.forEach((t, i) => {
+    if (t.day !== currentDay) {
+      if (currentDay) html += '</div>';
+      currentDay = t.day;
+      html += `<div class="day"><div class="day-header">${t.day}</div>`;
+    }
+    const posted = state[i] ? 'posted' : '';
+    html += `
+      <div class="tweet-card ${posted}" id="card-${i}">
+        <div class="slot-label">${t.slot}</div>
+        <div class="tweet-text">${t.text}</div>
+        <div class="actions">
+          <button class="btn btn-copy" onclick="copyTweet(${i})">Copy</button>
+          <button class="btn btn-posted ${state[i] ? 'is-posted' : ''}" onclick="togglePosted(${i})">${state[i] ? '✓ Posted' : 'Mark Posted'}</button>
+        </div>
+      </div>`;
+  });
+  html += '</div>';
+  container.innerHTML = html;
+
+  const repliesHtml = replies.map((r, i) => `
+    <div class="reply-card">
+      <div class="reply-trigger">${r.trigger}</div>
+      <div class="tweet-text">${r.text}</div>
+      <div class="actions"><button class="btn btn-copy" onclick="copyReply(${i})">Copy</button></div>
+    </div>`).join('');
+  document.getElementById('replies').innerHTML = repliesHtml;
+  updateStats();
+}
+
+function copyTweet(i) {
+  navigator.clipboard.writeText(tweets[i].text);
+  const btn = document.querySelector(`#card-${i} .btn-copy`);
+  btn.textContent = 'Copied!';
+  btn.classList.add('copied');
+  setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+}
+
+function copyReply(i) {
+  navigator.clipboard.writeText(replies[i].text);
+  event.target.textContent = 'Copied!';
+  event.target.classList.add('copied');
+  setTimeout(() => { event.target.textContent = 'Copy'; event.target.classList.remove('copied'); }, 1500);
+}
+
+function togglePosted(i) {
+  const state = getState();
+  state[i] = !state[i];
+  saveState(state);
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
