@@ -374,21 +374,30 @@ async function loadChains(){
   })
 }
 
+const BROKER_NAMES={orderly:'Orderly',woofi_pro:'WOOFi Pro',logx:'LogX',sharpe_ai:'Sharpe AI',vooi:'vooi.io',citrex:'Citrex',rage_trade:'Rage Trade',book_x:'BookX',filament:'Filament',btse_dex:'BTSE DEX',saros:'Saros',jojo:'JOJO',kodiak_fi:'KodiakFi',ascendex:'AscendEX',raydium:'Raydium',quick_perps:'QuickSwap',aden:'Aden',zetarium:'Zetarium'};
 async function loadBuilders(){
-  const url = 'https://orderly-dashboard-query-service.orderly.network/ranking/trading_volume?param='+encodeURIComponent(JSON.stringify({days:7,size:10}));
-  const data = await fetchJSON(url);
-  const accounts = data?.data?.account_ids || [];
-  const volumes = data?.data?.volume || [];
-  const wrap = document.getElementById('builderList');
+  const [volData,pnlData,posData] = await Promise.all([
+    fetchJSON('https://orderly-dashboard-query-service.orderly.network/ranking/trading_volume?param='+encodeURIComponent(JSON.stringify({days:7,size:10}))),
+    fetchJSON('https://orderly-dashboard-query-service.orderly.network/ranking/realized_pnl?param='+encodeURIComponent(JSON.stringify({days:7,size:50}))),
+    fetchJSON('https://orderly-dashboard-query-service.orderly.network/ranking/positions?param='+encodeURIComponent(JSON.stringify({days:7,size:50}))),
+  ]);
+  const brokerMap={};
+  for(const r of (pnlData?.data?.rows||[])){if(r.account_id&&r.broker_id)brokerMap[r.account_id]=r.broker_id;}
+  for(const r of (posData?.data?.rows||[])){if(r.account_id&&r.broker_id)brokerMap[r.account_id]=r.broker_id;}
+  const accounts=volData?.data?.account_ids||[];
+  const volumes=volData?.data?.volume||[];
+  const wrap=document.getElementById('builderList');
   wrap.innerHTML='';
   accounts.slice(0,7).forEach((a,i)=>{
-    const vol = volumes[i] || 0;
-    const addr = a.slice(0,10)+'…'+a.slice(-6);
-    const b64 = btoa(a).replace(/=+$/,'');
-    const href = `https://dashboard.orderly.network/address/${b64}?tab=positions`;
-    const row = document.createElement('div');
+    const vol=volumes[i]||0;
+    const broker=brokerMap[a]||'';
+    const brokerName=BROKER_NAMES[broker]||broker||'';
+    const addr=a.slice(0,10)+'\u2026'+a.slice(-6);
+    const b64=btoa(a).replace(/=+$/,'');
+    const href=broker?`https://dashboard.orderly.network/address/${b64}?broker_id=${broker}&tab=positions`:`https://dashboard.orderly.network/address/${b64}?tab=positions`;
+    const row=document.createElement('div');
     row.className='stat';
-    row.innerHTML=`<div><div class="muted small"><a href="${href}" target="_blank" style="color:var(--muted)">#${i+1} ${addr}</a></div><div class="value mono glow-green">${money(vol)}</div></div><div class="small muted">7d volume</div>`;
+    row.innerHTML=`<div><div class="muted small"><a href="${href}" target="_blank" style="color:var(--muted)">#${i+1} ${addr}</a></div><div class="value mono glow-green">${money(vol)}</div></div><div class="small muted">${brokerName||'7d volume'}</div>`;
     wrap.appendChild(row);
   });
 }
