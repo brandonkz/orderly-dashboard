@@ -6,11 +6,11 @@
 <title>Orderly War Room — Live</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0a0a0f;
-    --panel:#11131b;
+    --bg:#090a12;
+    --panel:#101320cc;
     --panel-2:#0f1118;
     --border:#1b1f2a;
     --text:#e6e8ef;
@@ -28,48 +28,72 @@
     color:var(--text);
     min-height:100vh;
     background-image:
-      linear-gradient(transparent 31px, rgba(255,255,255,.02) 32px),
-      linear-gradient(90deg, transparent 31px, rgba(255,255,255,.02) 32px);
-    background-size:32px 32px;
+      radial-gradient(1200px 700px at 10% 10%, rgba(123,63,228,.15), transparent 60%),
+      radial-gradient(1000px 600px at 90% 20%, rgba(0,212,170,.12), transparent 60%),
+      linear-gradient(135deg, #090a12 0%, #0b0d18 30%, #0c0f1d 60%, #0a0a14 100%);
+    animation:bgShift 40s ease-in-out infinite;
   }
+  @keyframes bgShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
   .scanlines:before{
     content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
     background:repeating-linear-gradient(0deg, rgba(255,255,255,.015), rgba(255,255,255,.015) 1px, transparent 1px, transparent 3px);
     mix-blend-mode:soft-light;opacity:.35;
   }
-  .container{max-width:1400px;margin:0 auto;padding:18px 22px 40px;position:relative;z-index:2;}
+  .container{max-width:1450px;margin:0 auto;padding:20px 22px 48px;position:relative;z-index:2;}
   header{
     display:flex;align-items:center;justify-content:space-between;gap:16px;
-    border:1px solid var(--border);border-radius:14px;padding:14px 18px;
-    background:linear-gradient(135deg, #0f1118 0%, #121626 100%);
-    box-shadow:0 10px 30px rgba(0,0,0,.35);
+    border-radius:16px;padding:16px 20px;position:relative;overflow:hidden;
+    background:linear-gradient(135deg, rgba(17,19,29,.8) 0%, rgba(14,17,30,.8) 100%);
+    box-shadow:0 12px 36px rgba(0,0,0,.45), inset 0 0 0 1px rgba(255,255,255,.04);
+    border:1px solid transparent;
   }
-  .logo{font-weight:700;letter-spacing:.12em;font-size:15px;color:#fff;}
-  .logo span{color:var(--purple)}
+  header:before{
+    content:"";position:absolute;inset:0;border-radius:16px;padding:1px;
+    background:linear-gradient(120deg, rgba(123,63,228,.8), rgba(0,212,170,.4), rgba(123,63,228,.8));
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;
+    animation:headerGlow 6s linear infinite;
+    pointer-events:none;
+  }
+  @keyframes headerGlow{0%{filter:hue-rotate(0deg)}50%{filter:hue-rotate(40deg)}100%{filter:hue-rotate(0deg)}}
+  .logo{font-weight:800;letter-spacing:.18em;font-size:18px;color:#fff;text-transform:uppercase}
+  .logo span{color:var(--purple);font-size:22px;letter-spacing:.2em}
   .live{
-    display:flex;align-items:center;gap:8px;font-weight:600;color:var(--green);
-    background:rgba(0,212,170,.1);padding:6px 10px;border-radius:999px;border:1px solid rgba(0,212,170,.3)
+    display:flex;align-items:center;gap:8px;font-weight:700;color:var(--green);
+    background:rgba(0,212,170,.12);padding:6px 12px;border-radius:999px;border:1px solid rgba(0,212,170,.35)
   }
   .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 1.4s infinite}
   @keyframes pulse{0%{transform:scale(.9);opacity:.6}50%{transform:scale(1.2);opacity:1}100%{transform:scale(.9);opacity:.6}}
-  .header-right{display:flex;align-items:center;gap:18px;color:var(--muted);font-size:13px}
-  .price{color:#fff;font-weight:600}
-  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;margin-top:16px}
+  .header-right{display:flex;align-items:center;gap:22px;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+  .price{color:#fff;font-weight:800;font-size:18px;letter-spacing:.02em}
+  .price-glow{filter:drop-shadow(0 0 10px rgba(0,212,170,.35));}
+  .price-glow.red{filter:drop-shadow(0 0 10px rgba(255,77,90,.35));}
+  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;margin-top:18px}
   .card{
-    background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px;
-    box-shadow:0 8px 24px rgba(0,0,0,.35)
+    background:var(--panel);border-radius:16px;padding:14px 16px;position:relative;
+    box-shadow:0 10px 28px rgba(0,0,0,.45);
+    border:1px solid rgba(123,63,228,.18);
+    backdrop-filter:blur(10px);
   }
-  .card h3{margin:0 0 10px;font-size:13px;letter-spacing:.12em;color:#c9cce0;text-transform:uppercase}
+  .card:before{
+    content:"";position:absolute;inset:0;border-radius:16px;padding:1px;pointer-events:none;
+    background:linear-gradient(135deg, rgba(123,63,228,.5), rgba(123,63,228,0), rgba(0,212,170,.35));
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;
+  }
+  .card h3{margin:0 0 10px;font-size:13px;letter-spacing:.16em;color:#c9cce0;text-transform:uppercase}
   .mono{font-family:"JetBrains Mono",monospace}
   .whale{grid-column:1/-1}
   table{width:100%;border-collapse:collapse;font-size:13px}
-  th,td{padding:10px 8px;border-bottom:1px solid var(--border);text-align:left}
-  th{color:var(--muted);font-weight:600;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
-  tr:hover{background:rgba(123,63,228,.08)}
+  th,td{padding:12px 8px;border-bottom:1px solid var(--border);text-align:left}
+  th{color:var(--muted);font-weight:600;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+  tr{transition:all .2s ease}
+  tr:hover{background:rgba(123,63,228,.12);box-shadow:inset 0 0 12px rgba(123,63,228,.25)}
   a{color:inherit;text-decoration:none}
-  .badge{padding:4px 8px;border-radius:999px;font-weight:600;font-size:11px}
-  .long{background:rgba(0,212,170,.18);color:var(--green);border:1px solid rgba(0,212,170,.4)}
-  .short{background:rgba(255,77,90,.18);color:var(--red);border:1px solid rgba(255,77,90,.4)}
+  .addr{color:rgba(167,133,255,.9)}
+  .badge{padding:4px 10px;border-radius:999px;font-weight:700;font-size:11px;letter-spacing:.04em}
+  .long{background:rgba(0,212,170,.18);color:var(--green);border:1px solid rgba(0,212,170,.5);box-shadow:0 0 12px rgba(0,212,170,.2)}
+  .short{background:rgba(255,77,90,.18);color:var(--red);border:1px solid rgba(255,77,90,.5);box-shadow:0 0 12px rgba(255,77,90,.2)}
   .split{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .daily{grid-column:1/7}
   .pnl{grid-column:7/13}
@@ -77,26 +101,33 @@
   .builders{grid-column:7/13}
   .funding{grid-column:1/9}
   .eco{grid-column:9/13}
-  .stat{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--border)}
+  .stat{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px dashed rgba(255,255,255,.06)}
   .stat:last-child{border-bottom:none}
-  .value{font-size:18px;font-weight:700}
-  .spark{width:90px;height:24px}
-  .bars{display:flex;flex-direction:column;gap:8px;margin-top:6px}
-  .bar{display:flex;align-items:center;gap:8px}
-  .bar span{min-width:72px;color:var(--muted);font-size:12px}
-  .bar .track{flex:1;height:10px;background:#0b0d14;border-radius:999px;overflow:hidden;border:1px solid var(--border)}
-  .bar .fill{height:100%;border-radius:999px}
-  .heat{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px}
-  .tile{padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--panel-2);display:flex;flex-direction:column;gap:6px}
-  .tile .sym{font-weight:600;font-size:12px;letter-spacing:.06em}
-  .tile .rate{font-size:14px;font-weight:700}
+  .value{font-size:20px;font-weight:800}
+  .value.hero{font-size:38px;letter-spacing:.02em;text-shadow:0 0 18px rgba(123,63,228,.25)}
+  .value.glow-green{text-shadow:0 0 16px rgba(0,212,170,.35)}
+  .value.glow-red{text-shadow:0 0 16px rgba(255,77,90,.35)}
+  .spark{width:110px;height:34px}
+  .bars{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+  .bar{display:flex;align-items:center;gap:10px}
+  .bar span{min-width:80px;color:var(--muted);font-size:12px}
+  .bar .track{flex:1;height:12px;background:#0b0d14;border-radius:999px;overflow:hidden;border:1px solid rgba(255,255,255,.06)}
+  .bar .fill{height:100%;border-radius:999px;box-shadow:0 0 12px rgba(123,63,228,.35)}
+  .bar .pct{min-width:56px;text-align:right;font-size:11px;color:#c2c7dd}
+  .heat{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+  .tile{padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden}
+  .tile:after{content:"";position:absolute;inset:-60% -60% auto auto;width:120%;height:120%;background:radial-gradient(circle, rgba(255,255,255,.12), transparent 60%);opacity:.35}
+  .tile .sym{font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+  .tile .rate{font-size:18px;font-weight:800}
   .eco-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .eco-item{padding:12px;border-radius:12px;background:var(--panel-2);border:1px solid var(--border)}
-  .eco-item .label{color:var(--muted);font-size:12px}
-  .eco-item .num{font-size:26px;font-weight:800;margin-top:6px}
+  .eco-item{padding:14px;border-radius:14px;background:rgba(15,17,24,.85);border:1px solid rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(123,63,228,.08)}
+  .eco-item .label{color:var(--muted);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+  .eco-item .num{font-size:30px;font-weight:800;margin-top:6px;text-shadow:0 0 14px rgba(123,63,228,.3)}
+  .eco-item .label.big{font-size:12px;letter-spacing:.16em;color:#d4d7e8}
   .muted{color:var(--muted)}
   .small{font-size:12px}
   .fade{opacity:.8}
+  footer{margin-top:18px;color:#9aa0b6;font-size:12px;text-align:center;letter-spacing:.08em;text-transform:uppercase}
   @media(max-width:1100px){
     .grid{grid-template-columns:1fr}
     .daily,.pnl,.chain,.builders,.funding,.eco,.whale{grid-column:1/-1}
@@ -108,11 +139,11 @@
 <body class="scanlines">
   <div class="container">
     <header>
-      <div class="logo">ORDERLY <span>NETWORK</span> — LIVE</div>
+      <div class="logo">ORDERLY <span>NETWORK</span></div>
       <div class="live"><span class="dot"></span>LIVE</div>
       <div class="header-right">
         <div>ORDER <span class="price" id="orderPrice">—</span> <span class="muted" id="orderChange"></span></div>
-        <div class="muted">Last updated: <span id="lastUpdated">—</span></div>
+        <div class="muted">Updated <span id="updatedAgo">—</span> ago</div>
       </div>
     </header>
 
@@ -164,10 +195,11 @@
           <div class="eco-item"><div class="label">Total DEXs</div><div class="num mono" id="dexCount">—</div></div>
           <div class="eco-item"><div class="label">Trading Pairs</div><div class="num mono" id="pairCount">—</div></div>
           <div class="eco-item"><div class="label">Chains</div><div class="num mono" id="chainCount">—</div></div>
-          <div class="eco-item"><div class="label">All‑Time Volume</div><div class="num mono" id="allTimeVol">—</div></div>
+          <div class="eco-item"><div class="label big">ALL‑TIME VOLUME</div><div class="num mono" id="allTimeVol">—</div></div>
         </div>
       </section>
     </div>
+    <footer>Powered by Orderly Network | Live Data</footer>
   </div>
 
 <script>
@@ -183,9 +215,10 @@ const fmt = (n, digits=1) => {
 const money = n => n===null? '—' : '$'+fmt(n,1);
 const shortAddr = a => a ? a.slice(0,6)+"…"+a.slice(-4) : '—';
 const sleep = ms => new Promise(r=>setTimeout(r,ms));
+let lastUpdateTs = Date.now();
 
-function sparkline(values){
-  const w=90,h=24,p=2;
+function sparkline(values, id){
+  const w=110,h=34,p=2;
   const min=Math.min(...values), max=Math.max(...values);
   const range=max-min || 1;
   const pts=values.map((v,i)=>{
@@ -193,7 +226,19 @@ function sparkline(values){
     const y = h - p - ((v-min)/range)*(h-2*p);
     return `${x},${y}`;
   }).join(' ');
-  return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><polyline fill="none" stroke="url(#grad)" stroke-width="2" points="${pts}"/></svg>`;
+  const fillPts = `0,${h} ${pts} ${w},${h}`;
+  const gid = `grad-${id}`;
+  return `
+    <svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="${gid}" x1="0" x2="1" y1="0" y2="1">
+          <stop offset="0%" stop-color="rgba(123,63,228,.8)" />
+          <stop offset="100%" stop-color="rgba(0,212,170,.6)" />
+        </linearGradient>
+      </defs>
+      <polyline fill="url(#${gid})" opacity=".25" points="${fillPts}" />
+      <polyline fill="none" stroke="url(#${gid})" stroke-width="2" points="${pts}" />
+    </svg>`;
 }
 
 async function fetchJSON(url){
@@ -206,11 +251,14 @@ async function loadHeader(){
   const data = await fetchJSON('https://api.coingecko.com/api/v3/simple/price?ids=orderly-network&vs_currencies=usd&include_24hr_change=true');
   const price = data['orderly-network']?.usd;
   const change = data['orderly-network']?.usd_24h_change;
-  document.getElementById('orderPrice').textContent = price? `$${price.toFixed(4)}`:'—';
+  const priceEl = document.getElementById('orderPrice');
+  priceEl.textContent = price? `$${price.toFixed(4)}`:'—';
   if(change!=null){
     const el = document.getElementById('orderChange');
     el.textContent = `(${change.toFixed(2)}%)`;
     el.style.color = change>=0? 'var(--green)' : 'var(--red)';
+    priceEl.classList.toggle('price-glow', true);
+    priceEl.classList.toggle('red', change<0);
   }
 }
 
@@ -220,7 +268,6 @@ async function loadWhales(){
   const rows = (data?.data?.rows||[]).filter(r=>r.broker_id!=='orderly');
   const top = rows.slice(0,10);
 
-  // fetch prices per symbol — clean symbol name for API
   const symNames = [...new Set(top.map(r=>r.symbol.replace('PERP_','').replace('_USDC','')))];
   const prices = {};
   for(const sym of symNames){
@@ -244,11 +291,11 @@ async function loadWhales(){
     const href = `https://dashboard.orderly.network/address/${b64}?broker_id=${r.broker_id}&tab=positions`;
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td class="mono"><a href="${href}" target="_blank">${shortAddr(addr)}</a></td>
+      <td class="mono addr"><a href="${href}" target="_blank">${shortAddr(addr)}</a></td>
       <td>${r.broker_id}</td>
       <td>${sym}</td>
       <td class="mono">${fmt(Math.abs(holding),2)}</td>
-      <td class="mono">${money(usd)}</td>
+      <td class="mono value ${usd>=0?'glow-green':''}">${money(usd)}</td>
       <td><span class="badge ${dir==='LONG'?'long':'short'}">${dir}</span></td>
     `;
     tbody.appendChild(tr);
@@ -258,7 +305,6 @@ async function loadWhales(){
 async function loadDaily(){
   const url = 'https://orderly-dashboard-query-service.orderly.network/daily_orderly_perp?param='+encodeURIComponent(JSON.stringify({days:7}));
   const data = await fetchJSON(url);
-  const dates = data?.data?.daytime || [];
   const rows = data?.data?.data || [];
   if(!rows.length) return;
   const last = rows[rows.length-1];
@@ -271,10 +317,10 @@ async function loadDaily(){
   ];
   const wrap = document.getElementById('dailyStats');
   wrap.innerHTML='';
-  stats.forEach(s=>{
+  stats.forEach((s,i)=>{
     const div = document.createElement('div');
     div.className='stat';
-    div.innerHTML = `<div><div class="muted small">${s.label}</div><div class="value mono">${money(s.val)}</div></div><div>${sparkline(s.series)}</div>`;
+    div.innerHTML = `<div><div class="muted small">${s.label}</div><div class="value mono ${i===0?'hero glow-green':'glow-green'}">${money(s.val)}</div></div><div>${sparkline(s.series, s.label)}</div>`;
     wrap.appendChild(div);
   })
 }
@@ -297,8 +343,10 @@ async function loadPnL(){
   arr.forEach((r,i)=>{
     const row = document.createElement('div');
     row.className='stat';
+    const crown = i===0 ? '🏆 ' : '';
+    const glow = r.pnl>=0 ? 'glow-green' : 'glow-red';
     row.innerHTML = `
-      <div><div class="muted small">#${i+1} ${shortAddr(r.address)}</div><div class="value mono" style="color:${r.pnl>=0?'var(--green)':'var(--red)'}">${money(r.pnl)}</div></div>
+      <div><div class="muted small">${crown}#${i+1} ${shortAddr(r.address)}</div><div class="value mono ${glow}">${money(r.pnl)}</div></div>
       <div class="small muted" style="text-align:right">${[...r.symbols].slice(0,4).join(', ')}<br><span class="fade">${r.broker}</span></div>
     `;
     wrap.appendChild(row);
@@ -319,7 +367,9 @@ async function loadChains(){
   entries.forEach(e=>{
     const row=document.createElement('div');
     row.className='bar';
-    row.innerHTML=`<span>${e.chain}</span><div class="track"><div class="fill" style="width:${(e.tvl/max)*100}%;background:${colors[e.chain]||'var(--purple)'}"></div></div><div class="mono small">${money(e.tvl)}</div>`;
+    const pct = total ? (e.tvl/total*100) : 0;
+    const color = colors[e.chain]||'var(--purple)';
+    row.innerHTML=`<span>${e.chain}</span><div class="track"><div class="fill" style="width:${(e.tvl/max)*100}%;background:linear-gradient(90deg, ${color} 0%, rgba(0,0,0,0) 100%)"></div></div><div class="pct mono">${pct.toFixed(1)}%</div><div class="mono small">${money(e.tvl)}</div>`;
     wrap.appendChild(row);
   })
 }
@@ -338,7 +388,7 @@ async function loadBuilders(){
     const href = `https://dashboard.orderly.network/address/${b64}?tab=positions`;
     const row = document.createElement('div');
     row.className='stat';
-    row.innerHTML=`<div><div class="muted small"><a href="${href}" target="_blank" style="color:var(--muted)">#${i+1} ${addr}</a></div><div class="value mono">${money(vol)}</div></div><div class="small muted">7d volume</div>`;
+    row.innerHTML=`<div><div class="muted small"><a href="${href}" target="_blank" style="color:var(--muted)">#${i+1} ${addr}</a></div><div class="value mono glow-green">${money(vol)}</div></div><div class="small muted">7d volume</div>`;
     wrap.appendChild(row);
   });
 }
@@ -354,11 +404,13 @@ async function loadFunding(){
       rate = data?.data?.est_funding_rate || data?.data?.rate || 0;
     }catch(e){rate=0}
     const annual = rate * 24 * 365 * 100;
-    const intensity = Math.min(Math.abs(annual)/50,1); // cap
-    const color = annual>=0? `rgba(0,212,170,${0.15+0.6*intensity})` : `rgba(255,77,90,${0.15+0.6*intensity})`;
+    const intensity = Math.min(Math.abs(annual)/50,1);
+    const color = annual>=0? `rgba(0,212,170,${0.25+0.6*intensity})` : `rgba(255,77,90,${0.25+0.6*intensity})`;
+    const glow = annual>=0? '0 0 16px rgba(0,212,170,.25)' : '0 0 16px rgba(255,77,90,.25)';
     const tile = document.createElement('div');
     tile.className='tile';
     tile.style.background = color;
+    tile.style.boxShadow = glow;
     tile.innerHTML = `<div class="sym">${sym}</div><div class="rate mono">${annual.toFixed(2)}%</div><div class="small muted">annualized</div>`;
     grid.appendChild(tile);
     await sleep(500);
@@ -390,10 +442,16 @@ function animateNum(id, value, moneyFmt=false){
   requestAnimationFrame(tick);
 }
 
+function updateAgo(){
+  const diff = Math.max(0, Math.floor((Date.now()-lastUpdateTs)/1000));
+  const el = document.getElementById('updatedAgo');
+  el.textContent = diff < 60 ? `${diff}s` : `${Math.floor(diff/60)}m ${diff%60}s`;
+}
+
 async function refreshAll(){
-  document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
+  lastUpdateTs = Date.now();
+  updateAgo();
   const safe = fn => fn().catch(e=>console.warn(fn.name, e.message));
-  // Stagger calls to avoid rate limits
   await safe(loadHeader);
   await safe(loadEco);
   await sleep(500);
@@ -402,13 +460,13 @@ async function refreshAll(){
   await sleep(500);
   await safe(loadChains);
   await safe(loadWhales);
-  // These are slow (sequential with delays) — run last
   safe(loadFunding);
   safe(loadBuilders);
 }
 
 refreshAll();
 setInterval(refreshAll, 60000);
+setInterval(updateAgo, 1000);
 </script>
 </body>
 </html>
