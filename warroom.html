@@ -324,7 +324,16 @@ async function loadChains(){
   })
 }
 
-const builderIds = ['woofi_pro','logx','sharpe_ai','vooi','citrex','rage_trade','book_x','filament','btse_dex','saros','jojo','kodiak_fi','ascendex','empyreal','emdx_dex','bitoro_network','linear_finance','raydium','quick_perps'];
+const builders = [
+  {id:'woofi_pro',name:'WOOFi Pro'},{id:'logx',name:'LogX'},{id:'sharpe_ai',name:'Sharpe AI'},
+  {id:'vooi',name:'vooi.io'},{id:'citrex',name:'Citrex'},{id:'rage_trade',name:'Rage Trade'},
+  {id:'book_x',name:'BookX'},{id:'filament',name:'Filament'},{id:'btse_dex',name:'BTSE DEX'},
+  {id:'saros',name:'Saros'},{id:'jojo',name:'JOJO'},{id:'kodiak_fi',name:'KodiakFi'},
+  {id:'ascendex',name:'AscendEX'},{id:'empyreal',name:'Empyreal'},{id:'emdx_dex',name:'EMDX'},
+  {id:'bitoro_network',name:'Bitoro'},{id:'linear_finance',name:'Linear Finance'},
+  {id:'raydium',name:'Raydium'},{id:'quick_perps',name:'QuickSwap'},{id:'aden',name:'Aden'},
+  {id:'zetarium',name:'Zetarium'}
+];
 let builderCache = {ts:0, data:[]};
 async function loadBuilders(){
   const now = Date.now();
@@ -332,12 +341,12 @@ async function loadBuilders(){
     renderBuilders(builderCache.data);return;
   }
   const results=[];
-  for(const id of builderIds){
+  for(const b of builders){
     try{
-      const data = await fetchJSON(`https://api-evm.orderly.org/v1/public/volume/stats?broker_id=${id}`);
+      const data = await fetchJSON(`https://api-evm.orderly.org/v1/public/volume/stats?broker_id=${b.id}`);
       const vol = data?.data?.perp_volume_last_7_days || 0;
-      results.push({id, vol});
-    }catch(e){results.push({id, vol:0})}
+      if(vol > 0) results.push({id:b.id, name:b.name, vol});
+    }catch(e){}
     await sleep(1500);
   }
   results.sort((a,b)=>b.vol-a.vol);
@@ -350,7 +359,7 @@ function renderBuilders(list){
   list.forEach((r,i)=>{
     const row=document.createElement('div');
     row.className='stat';
-    row.innerHTML=`<div><div class="muted small">#${i+1} ${r.id}</div><div class="value mono">${money(r.vol)}</div></div><div class="small muted">7d volume</div>`;
+    row.innerHTML=`<div><div class="muted small">#${i+1} ${r.name}</div><div class="value mono">${money(r.vol)}</div></div><div class="small muted">7d volume</div>`;
     wrap.appendChild(row);
   })
 }
