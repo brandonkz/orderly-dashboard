@@ -340,14 +340,18 @@ async function loadBuilders(){
   if(now - builderCache.ts < 10*60*1000 && builderCache.data.length){
     renderBuilders(builderCache.data);return;
   }
+  const wrap = document.getElementById('builderList');
+  wrap.innerHTML='<div class="muted small" style="padding:12px">Loading builders (30s)...</div>';
   const results=[];
   for(const b of builders){
     try{
-      const data = await fetchJSON(`https://api-evm.orderly.org/v1/public/volume/stats?broker_id=${b.id}`);
+      const res = await fetch(`https://api-evm.orderly.org/v1/public/volume/stats?broker_id=${b.id}`);
+      if(res.status === 429){ await sleep(5000); continue; }
+      const data = await res.json();
       const vol = data?.data?.perp_volume_last_7_days || 0;
       if(vol > 0) results.push({id:b.id, name:b.name, vol});
     }catch(e){}
-    await sleep(1500);
+    await sleep(2000);
   }
   results.sort((a,b)=>b.vol-a.vol);
   builderCache = {ts:now, data:results.slice(0,5)};
