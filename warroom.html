@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Orderly War Room — Live</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0f;
+    --panel:#11131b;
+    --panel-2:#0f1118;
+    --border:#1b1f2a;
+    --text:#e6e8ef;
+    --muted:#8b90a3;
+    --purple:#7B3FE4;
+    --green:#00D4AA;
+    --red:#ff4d5a;
+    --yellow:#ffc857;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    background-image:
+      linear-gradient(transparent 31px, rgba(255,255,255,.02) 32px),
+      linear-gradient(90deg, transparent 31px, rgba(255,255,255,.02) 32px);
+    background-size:32px 32px;
+  }
+  .scanlines:before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
+    background:repeating-linear-gradient(0deg, rgba(255,255,255,.015), rgba(255,255,255,.015) 1px, transparent 1px, transparent 3px);
+    mix-blend-mode:soft-light;opacity:.35;
+  }
+  .container{max-width:1400px;margin:0 auto;padding:18px 22px 40px;position:relative;z-index:2;}
+  header{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    border:1px solid var(--border);border-radius:14px;padding:14px 18px;
+    background:linear-gradient(135deg, #0f1118 0%, #121626 100%);
+    box-shadow:0 10px 30px rgba(0,0,0,.35);
+  }
+  .logo{font-weight:700;letter-spacing:.12em;font-size:15px;color:#fff;}
+  .logo span{color:var(--purple)}
+  .live{
+    display:flex;align-items:center;gap:8px;font-weight:600;color:var(--green);
+    background:rgba(0,212,170,.1);padding:6px 10px;border-radius:999px;border:1px solid rgba(0,212,170,.3)
+  }
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 1.4s infinite}
+  @keyframes pulse{0%{transform:scale(.9);opacity:.6}50%{transform:scale(1.2);opacity:1}100%{transform:scale(.9);opacity:.6}}
+  .header-right{display:flex;align-items:center;gap:18px;color:var(--muted);font-size:13px}
+  .price{color:#fff;font-weight:600}
+  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;margin-top:16px}
+  .card{
+    background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px;
+    box-shadow:0 8px 24px rgba(0,0,0,.35)
+  }
+  .card h3{margin:0 0 10px;font-size:13px;letter-spacing:.12em;color:#c9cce0;text-transform:uppercase}
+  .mono{font-family:"JetBrains Mono",monospace}
+  .whale{grid-column:1/-1}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{padding:10px 8px;border-bottom:1px solid var(--border);text-align:left}
+  th{color:var(--muted);font-weight:600;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+  tr:hover{background:rgba(123,63,228,.08)}
+  a{color:inherit;text-decoration:none}
+  .badge{padding:4px 8px;border-radius:999px;font-weight:600;font-size:11px}
+  .long{background:rgba(0,212,170,.18);color:var(--green);border:1px solid rgba(0,212,170,.4)}
+  .short{background:rgba(255,77,90,.18);color:var(--red);border:1px solid rgba(255,77,90,.4)}
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .daily{grid-column:1/7}
+  .pnl{grid-column:7/13}
+  .chain{grid-column:1/7}
+  .builders{grid-column:7/13}
+  .funding{grid-column:1/9}
+  .eco{grid-column:9/13}
+  .stat{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--border)}
+  .stat:last-child{border-bottom:none}
+  .value{font-size:18px;font-weight:700}
+  .spark{width:90px;height:24px}
+  .bars{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+  .bar{display:flex;align-items:center;gap:8px}
+  .bar span{min-width:72px;color:var(--muted);font-size:12px}
+  .bar .track{flex:1;height:10px;background:#0b0d14;border-radius:999px;overflow:hidden;border:1px solid var(--border)}
+  .bar .fill{height:100%;border-radius:999px}
+  .heat{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px}
+  .tile{padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--panel-2);display:flex;flex-direction:column;gap:6px}
+  .tile .sym{font-weight:600;font-size:12px;letter-spacing:.06em}
+  .tile .rate{font-size:14px;font-weight:700}
+  .eco-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .eco-item{padding:12px;border-radius:12px;background:var(--panel-2);border:1px solid var(--border)}
+  .eco-item .label{color:var(--muted);font-size:12px}
+  .eco-item .num{font-size:26px;font-weight:800;margin-top:6px}
+  .muted{color:var(--muted)}
+  .small{font-size:12px}
+  .fade{opacity:.8}
+  @media(max-width:1100px){
+    .grid{grid-template-columns:1fr}
+    .daily,.pnl,.chain,.builders,.funding,.eco,.whale{grid-column:1/-1}
+    header{flex-direction:column;align-items:flex-start}
+    .header-right{flex-wrap:wrap}
+  }
+</style>
+</head>
+<body class="scanlines">
+  <div class="container">
+    <header>
+      <div class="logo">ORDERLY <span>NETWORK</span> — LIVE</div>
+      <div class="live"><span class="dot"></span>LIVE</div>
+      <div class="header-right">
+        <div>ORDER <span class="price" id="orderPrice">—</span> <span class="muted" id="orderChange"></span></div>
+        <div class="muted">Last updated: <span id="lastUpdated">—</span></div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="card whale">
+        <h3>Whale Tracker</h3>
+        <div class="small muted">Top open positions (real brokers only)</div>
+        <div style="overflow:auto;margin-top:8px">
+          <table id="whaleTable">
+            <thead>
+              <tr>
+                <th>Wallet</th><th>Broker</th><th>Asset</th><th>Position</th><th>USD Value</th><th>Direction</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card daily">
+        <h3>Daily Pulse</h3>
+        <div id="dailyStats"></div>
+      </section>
+
+      <section class="card pnl">
+        <h3>PnL Leaderboard</h3>
+        <div id="pnlList"></div>
+      </section>
+
+      <section class="card chain">
+        <h3>Chain Deposits</h3>
+        <div class="small muted" id="chainTotal">Total TVL: —</div>
+        <div class="bars" id="chainBars"></div>
+      </section>
+
+      <section class="card builders">
+        <h3>Builder Leaderboard</h3>
+        <div id="builderList"></div>
+      </section>
+
+      <section class="card funding">
+        <h3>Funding Rate Heat Map</h3>
+        <div class="heat" id="fundingGrid"></div>
+      </section>
+
+      <section class="card eco">
+        <h3>Ecosystem Counter</h3>
+        <div class="eco-grid">
+          <div class="eco-item"><div class="label">Total DEXs</div><div class="num mono" id="dexCount">—</div></div>
+          <div class="eco-item"><div class="label">Trading Pairs</div><div class="num mono" id="pairCount">—</div></div>
+          <div class="eco-item"><div class="label">Chains</div><div class="num mono" id="chainCount">—</div></div>
+          <div class="eco-item"><div class="label">All‑Time Volume</div><div class="num mono" id="allTimeVol">—</div></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+<script>
+const fmt = (n, digits=1) => {
+  if (n === null || n === undefined || isNaN(n)) return '—';
+  const abs = Math.abs(n);
+  if (abs >= 1e12) return (n/1e12).toFixed(digits)+"T";
+  if (abs >= 1e9) return (n/1e9).toFixed(digits)+"B";
+  if (abs >= 1e6) return (n/1e6).toFixed(digits)+"M";
+  if (abs >= 1e3) return (n/1e3).toFixed(digits)+"K";
+  return n.toFixed(0);
+};
+const money = n => n===null? '—' : '$'+fmt(n,1);
+const shortAddr = a => a ? a.slice(0,6)+"…"+a.slice(-4) : '—';
+const sleep = ms => new Promise(r=>setTimeout(r,ms));
+
+function sparkline(values){
+  const w=90,h=24,p=2;
+  const min=Math.min(...values), max=Math.max(...values);
+  const range=max-min || 1;
+  const pts=values.map((v,i)=>{
+    const x = p + (i/(values.length-1))*(w-2*p);
+    const y = h - p - ((v-min)/range)*(h-2*p);
+    return `${x},${y}`;
+  }).join(' ');
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><polyline fill="none" stroke="url(#grad)" stroke-width="2" points="${pts}"/></svg>`;
+}
+
+async function fetchJSON(url){
+  const res = await fetch(url);
+  if(!res.ok) throw new Error(url+" "+res.status);
+  return res.json();
+}
+
+async function loadHeader(){
+  const data = await fetchJSON('https://api.coingecko.com/api/v3/simple/price?ids=orderly-network&vs_currencies=usd&include_24hr_change=true');
+  const price = data['orderly-network']?.usd;
+  const change = data['orderly-network']?.usd_24h_change;
+  document.getElementById('orderPrice').textContent = price? `$${price.toFixed(4)}`:'—';
+  if(change!=null){
+    const el = document.getElementById('orderChange');
+    el.textContent = `(${change.toFixed(2)}%)`;
+    el.style.color = change>=0? 'var(--green)' : 'var(--red)';
+  }
+}
+
+async function loadWhales(){
+  const url = 'https://orderly-dashboard-query-service.orderly.network/ranking/positions?param='+encodeURIComponent(JSON.stringify({days:7,size:50}));
+  const data = await fetchJSON(url);
+  const rows = (data?.data||data||[]).filter(r=>r.broker_id!=='orderly');
+  const top = rows.slice(0,10);
+
+  // fetch prices per symbol
+  const symbols = [...new Set(top.map(r=>r.symbol))];
+  const prices = {};
+  for(const sym of symbols){
+    try{
+      const p = await fetchJSON(`https://api-evm.orderly.org/v1/public/futures/PERP_${sym}_USDC`);
+      prices[sym] = p?.data?.index_price || p?.data?.last_price || null;
+      await sleep(200);
+    }catch(e){prices[sym]=null}
+  }
+
+  const tbody = document.querySelector('#whaleTable tbody');
+  tbody.innerHTML='';
+  top.forEach(r=>{
+    const price = prices[r.symbol] || 0;
+    const usd = Math.abs(r.position_qty||0) * price;
+    const dir = (r.position_qty||0) >=0 ? 'LONG' : 'SHORT';
+    const b64 = btoa(r.address||r.wallet||'').replace(/=+$/,'');
+    const href = `https://dashboard.orderly.network/address/${b64}?broker_id=${r.broker_id}&tab=positions`;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="mono"><a href="${href}" target="_blank">${shortAddr(r.address||r.wallet)}</a></td>
+      <td>${r.broker_id}</td>
+      <td>${r.symbol}</td>
+      <td class="mono">${fmt(Math.abs(r.position_qty||0),2)}</td>
+      <td class="mono">${money(usd)}</td>
+      <td><span class="badge ${dir==='LONG'?'long':'short'}">${dir}</span></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+async function loadDaily(){
+  const url = 'https://orderly-dashboard-query-service.orderly.network/daily_orderly_perp?param='+encodeURIComponent(JSON.stringify({days:7}));
+  const data = await fetchJSON(url);
+  const rows = (data?.data||data||[]);
+  if(!rows.length) return;
+  const last = rows[rows.length-1];
+  const stats = [
+    {label:'Volume', val:last.trading_volume, series: rows.map(r=>r.trading_volume)},
+    {label:'Trades', val:last.trading_count, series: rows.map(r=>r.trading_count)},
+    {label:'Active Users', val:last.trading_user_count, series: rows.map(r=>r.trading_user_count)},
+    {label:'Liquidations', val:last.liquidation_count, series: rows.map(r=>r.liquidation_count)},
+    {label:'Fees', val:last.trading_fee, series: rows.map(r=>r.trading_fee)},
+  ];
+  const wrap = document.getElementById('dailyStats');
+  wrap.innerHTML='';
+  stats.forEach(s=>{
+    const div = document.createElement('div');
+    div.className='stat';
+    div.innerHTML = `<div><div class="muted small">${s.label}</div><div class="value mono">${money(s.val)}</div></div><div>${sparkline(s.series)}</div>`;
+    wrap.appendChild(div);
+  })
+}
+
+async function loadPnL(){
+  const url = 'https://orderly-dashboard-query-service.orderly.network/ranking/realized_pnl?param='+encodeURIComponent(JSON.stringify({days:7,size:20}));
+  const data = await fetchJSON(url);
+  const rows = (data?.data||data||[]).filter(r=>r.broker_id!=='orderly');
+  const map = new Map();
+  rows.forEach(r=>{
+    const key = r.address || r.wallet;
+    if(!map.has(key)) map.set(key,{address:key, pnl:0, symbols:new Set(), broker:r.broker_id});
+    const obj = map.get(key);
+    obj.pnl += Number(r.total_realized_pnl||0);
+    if(r.symbol) obj.symbols.add(r.symbol);
+  });
+  const arr = Array.from(map.values()).sort((a,b)=>b.pnl-a.pnl).slice(0,5);
+  const wrap = document.getElementById('pnlList');
+  wrap.innerHTML='';
+  arr.forEach((r,i)=>{
+    const row = document.createElement('div');
+    row.className='stat';
+    row.innerHTML = `
+      <div><div class="muted small">#${i+1} ${shortAddr(r.address)}</div><div class="value mono" style="color:${r.pnl>=0?'var(--green)':'var(--red)'}">${money(r.pnl)}</div></div>
+      <div class="small muted" style="text-align:right">${[...r.symbols].slice(0,4).join(', ')}<br><span class="fade">${r.broker}</span></div>
+    `;
+    wrap.appendChild(row);
+  })
+}
+
+async function loadChains(){
+  const data = await fetchJSON('https://api.llama.fi/protocols');
+  const protocol = data.find(p=>p.slug==='orderly-bridge');
+  const chainTvls = protocol?.chainTvls || {};
+  const entries = Object.entries(chainTvls).map(([k,v])=>({chain:k, tvl:v})).sort((a,b)=>b.tvl-a.tvl).slice(0,10);
+  const total = Object.values(chainTvls).reduce((a,b)=>a+b,0);
+  document.getElementById('chainTotal').textContent = `Total TVL: ${money(total)}`;
+  const colors={Solana:'#9945FF',Arbitrum:'#28A0F0',Ethereum:'#627EEA',Optimism:'#FF0420',Base:'#0052FF',Avalanche:'#E84142',BNB:'#F0B90B'};
+  const max = entries[0]?.tvl || 1;
+  const wrap = document.getElementById('chainBars');
+  wrap.innerHTML='';
+  entries.forEach(e=>{
+    const row=document.createElement('div');
+    row.className='bar';
+    row.innerHTML=`<span>${e.chain}</span><div class="track"><div class="fill" style="width:${(e.tvl/max)*100}%;background:${colors[e.chain]||'var(--purple)'}"></div></div><div class="mono small">${money(e.tvl)}</div>`;
+    wrap.appendChild(row);
+  })
+}
+
+const builderIds = ['woofi_pro','logx','sharpe_ai','vooi','citrex','rage_trade','book_x','filament','btse_dex','saros','jojo','kodiak_fi','ascendex','empyreal','emdx_dex','bitoro_network','linear_finance','raydium','quick_perps'];
+let builderCache = {ts:0, data:[]};
+async function loadBuilders(){
+  const now = Date.now();
+  if(now - builderCache.ts < 10*60*1000 && builderCache.data.length){
+    renderBuilders(builderCache.data);return;
+  }
+  const results=[];
+  for(const id of builderIds){
+    try{
+      const data = await fetchJSON(`https://api-evm.orderly.org/v1/public/volume/stats?broker_id=${id}`);
+      const vol = data?.data?.perp_volume_last_7_days || 0;
+      results.push({id, vol});
+    }catch(e){results.push({id, vol:0})}
+    await sleep(1500);
+  }
+  results.sort((a,b)=>b.vol-a.vol);
+  builderCache = {ts:now, data:results.slice(0,5)};
+  renderBuilders(builderCache.data);
+}
+function renderBuilders(list){
+  const wrap = document.getElementById('builderList');
+  wrap.innerHTML='';
+  list.forEach((r,i)=>{
+    const row=document.createElement('div');
+    row.className='stat';
+    row.innerHTML=`<div><div class="muted small">#${i+1} ${r.id}</div><div class="value mono">${money(r.vol)}</div></div><div class="small muted">7d volume</div>`;
+    wrap.appendChild(row);
+  })
+}
+
+const fundingSyms = ['BTC','ETH','SOL','XAU','XAG','TSLA','NVDA','AAPL','GOOGL','DOGE','PEPE','PUMP','ORDER','BNB','AVAX','ARB'];
+async function loadFunding(){
+  const grid = document.getElementById('fundingGrid');
+  grid.innerHTML='';
+  for(const sym of fundingSyms){
+    let rate=0;
+    try{
+      const data = await fetchJSON(`https://api-evm.orderly.org/v1/public/funding_rate/PERP_${sym}_USDC`);
+      rate = data?.data?.rate || 0;
+    }catch(e){rate=0}
+    const annual = rate * 24 * 365 * 100;
+    const intensity = Math.min(Math.abs(annual)/50,1); // cap
+    const color = annual>=0? `rgba(0,212,170,${0.15+0.6*intensity})` : `rgba(255,77,90,${0.15+0.6*intensity})`;
+    const tile = document.createElement('div');
+    tile.className='tile';
+    tile.style.background = color;
+    tile.innerHTML = `<div class="sym">${sym}</div><div class="rate mono">${annual.toFixed(2)}%</div><div class="small muted">annualized</div>`;
+    grid.appendChild(tile);
+    await sleep(500);
+  }
+}
+
+async function loadEco(){
+  const [dex, info, chains, vol] = await Promise.all([
+    fetchJSON('https://api-evm.orderly.org/v1/public/broker/name'),
+    fetchJSON('https://api-evm.orderly.org/v1/public/info'),
+    fetchJSON('https://api-evm.orderly.org/v1/public/chain_info'),
+    fetchJSON('https://api-evm.orderly.org/v1/public/volume/stats')
+  ]);
+  animateNum('dexCount', dex?.data?.length||0);
+  animateNum('pairCount', info?.data?.length||0);
+  animateNum('chainCount', chains?.data?.length||0);
+  animateNum('allTimeVol', vol?.data?.perp_volume_ltd||0, true);
+}
+
+function animateNum(id, value, moneyFmt=false){
+  const el = document.getElementById(id);
+  const start = 0; const end = value; const duration=1200; const startTime = performance.now();
+  const tick = (t)=>{
+    const p = Math.min((t-startTime)/duration,1);
+    const v = start + (end-start)*p;
+    el.textContent = moneyFmt ? money(v) : Math.round(v).toLocaleString();
+    if(p<1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
+async function refreshAll(){
+  document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
+  loadHeader();
+  loadWhales();
+  loadDaily();
+  loadPnL();
+  loadChains();
+  loadBuilders();
+  loadFunding();
+  loadEco();
+}
+
+refreshAll();
+setInterval(refreshAll, 60000);
+</script>
+</body>
+</html>
