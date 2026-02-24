@@ -16,6 +16,12 @@ h1 { color: #a78bfa; font-size: 1.4em; margin-bottom: 4px; }
 .tweet-card:not(.posted):hover { border-color: #a78bfa; }
 .slot-label { color: #7c3aed; font-size: 0.75em; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
 .tweet-text { white-space: pre-wrap; font-size: 0.9em; line-height: 1.5; color: #d0d0d0; }
+.image-slot { margin: 10px 0; }
+.image-upload-label { display: inline-block; padding: 6px 14px; background: rgba(255,255,255,0.08); border: 1px dashed rgba(255,255,255,0.2); border-radius: 8px; cursor: pointer; font-size: 13px; color: #94a3b8; transition: all 0.2s; }
+.image-upload-label:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.4); color: #fff; }
+.image-preview { position: relative; display: inline-block; }
+.image-preview img { max-width: 200px; max-height: 120px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); }
+.btn-remove-img { position: absolute; top: -6px; right: -6px; width: 22px; height: 22px; border-radius: 50%; background: #ef4444; color: #fff; border: none; cursor: pointer; font-size: 12px; line-height: 22px; padding: 0; }
 .actions { display: flex; gap: 8px; margin-top: 10px; }
 .btn { padding: 6px 14px; border-radius: 6px; border: none; font-size: 0.8em; font-weight: 600; cursor: pointer; transition: all 0.2s; }
 .btn-copy { background: #7c3aed; color: white; }
@@ -115,10 +121,14 @@ function render() {
       html += `<div class="day"><div class="day-header">${t.day}</div>`;
     }
     const posted = state[i] ? 'posted' : '';
+    const imgState = getImageState(i);
     html += `
       <div class="tweet-card ${posted}" id="card-${i}">
         <div class="slot-label">${t.slot}</div>
         <div class="tweet-text">${t.text}</div>
+        <div class="image-slot" id="img-slot-${i}">
+          ${imgState ? `<div class="image-preview"><img src="${imgState}" alt="Tweet image" /><button class="btn-remove-img" onclick="removeImage(${i})">✕</button></div>` : `<label class="image-upload-label" for="img-upload-${i}">📎 Add image<input type="file" id="img-upload-${i}" accept="image/*" onchange="handleImageUpload(${i}, this)" hidden /></label>`}
+        </div>
         <div class="actions">
           <button class="btn btn-copy" onclick="copyTweet(${i})">Copy</button>
           <button class="btn btn-posted ${state[i] ? 'is-posted' : ''}" onclick="togglePosted(${i})">${state[i] ? '✓ Posted' : 'Mark Posted'}</button>
@@ -157,6 +167,31 @@ function togglePosted(i) {
   const state = getState();
   state[i] = !state[i];
   saveState(state);
+  render();
+}
+
+const IMG_KEY = 'orderly-dashboard-images';
+function getImages() { try { return JSON.parse(localStorage.getItem(IMG_KEY)) || {}; } catch { return {}; } }
+function saveImages(imgs) { localStorage.setItem(IMG_KEY, JSON.stringify(imgs)); }
+function getImageState(i) { return getImages()[i] || null; }
+
+function handleImageUpload(i, input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const imgs = getImages();
+    imgs[i] = e.target.result;
+    saveImages(imgs);
+    render();
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeImage(i) {
+  const imgs = getImages();
+  delete imgs[i];
+  saveImages(imgs);
   render();
 }
 
