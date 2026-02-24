@@ -217,34 +217,37 @@ async function loadHeader(){
 async function loadWhales(){
   const url = 'https://orderly-dashboard-query-service.orderly.network/ranking/positions?param='+encodeURIComponent(JSON.stringify({days:7,size:50}));
   const data = await fetchJSON(url);
-  const rows = (data?.data||data||[]).filter(r=>r.broker_id!=='orderly');
+  const rows = (data?.data?.rows||[]).filter(r=>r.broker_id!=='orderly');
   const top = rows.slice(0,10);
 
-  // fetch prices per symbol
-  const symbols = [...new Set(top.map(r=>r.symbol))];
+  // fetch prices per symbol — clean symbol name for API
+  const symNames = [...new Set(top.map(r=>r.symbol.replace('PERP_','').replace('_USDC','')))];
   const prices = {};
-  for(const sym of symbols){
+  for(const sym of symNames){
     try{
       const p = await fetchJSON(`https://api-evm.orderly.org/v1/public/futures/PERP_${sym}_USDC`);
-      prices[sym] = p?.data?.index_price || p?.data?.last_price || null;
-      await sleep(200);
+      prices[sym] = p?.data?.mark_price || p?.data?.index_price || null;
+      await sleep(300);
     }catch(e){prices[sym]=null}
   }
 
   const tbody = document.querySelector('#whaleTable tbody');
   tbody.innerHTML='';
   top.forEach(r=>{
-    const price = prices[r.symbol] || 0;
-    const usd = Math.abs(r.position_qty||0) * price;
-    const dir = (r.position_qty||0) >=0 ? 'LONG' : 'SHORT';
-    const b64 = btoa(r.address||r.wallet||'').replace(/=+$/,'');
+    const sym = r.symbol.replace('PERP_','').replace('_USDC','');
+    const price = prices[sym] || 0;
+    const holding = parseFloat(r.holding||0);
+    const usd = Math.abs(holding) * price;
+    const dir = holding >=0 ? 'LONG' : 'SHORT';
+    const addr = r.address || '';
+    const b64 = btoa(addr).replace(/=+$/,'');
     const href = `https://dashboard.orderly.network/address/${b64}?broker_id=${r.broker_id}&tab=positions`;
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td class="mono"><a href="${href}" target="_blank">${shortAddr(r.address||r.wallet)}</a></td>
+      <td class="mono"><a href="${href}" target="_blank">${shortAddr(addr)}</a></td>
       <td>${r.broker_id}</td>
-      <td>${r.symbol}</td>
-      <td class="mono">${fmt(Math.abs(r.position_qty||0),2)}</td>
+      <td>${sym}</td>
+      <td class="mono">${fmt(Math.abs(holding),2)}</td>
       <td class="mono">${money(usd)}</td>
       <td><span class="badge ${dir==='LONG'?'long':'short'}">${dir}</span></td>
     `;
@@ -255,7 +258,8 @@ async function loadWhales(){
 async function loadDaily(){
   const url = 'https://orderly-dashboard-query-service.orderly.network/daily_orderly_perp?param='+encodeURIComponent(JSON.stringify({days:7}));
   const data = await fetchJSON(url);
-  const rows = (data?.data||data||[]);
+  const dates = data?.data?.daytime || [];
+  const rows = data?.data?.data || [];
   if(!rows.length) return;
   const last = rows[rows.length-1];
   const stats = [
@@ -278,14 +282,14 @@ async function loadDaily(){
 async function loadPnL(){
   const url = 'https://orderly-dashboard-query-service.orderly.network/ranking/realized_pnl?param='+encodeURIComponent(JSON.stringify({days:7,size:20}));
   const data = await fetchJSON(url);
-  const rows = (data?.data||data||[]).filter(r=>r.broker_id!=='orderly');
+  const rows = (data?.data?.rows||[]).filter(r=>r.broker_id!=='orderly');
   const map = new Map();
   rows.forEach(r=>{
     const key = r.address || r.wallet;
     if(!map.has(key)) map.set(key,{address:key, pnl:0, symbols:new Set(), broker:r.broker_id});
     const obj = map.get(key);
     obj.pnl += Number(r.total_realized_pnl||0);
-    if(r.symbol) obj.symbols.add(r.symbol);
+    if(r.symbol) obj.symbols.add(r.symbol.replace('PERP_','').replace('_USDC',''));
   });
   const arr = Array.from(map.values()).sort((a,b)=>b.pnl-a.pnl).slice(0,5);
   const wrap = document.getElementById('pnlList');
@@ -359,7 +363,7 @@ async function loadFunding(){
     let rate=0;
     try{
       const data = await fetchJSON(`https://api-evm.orderly.org/v1/public/funding_rate/PERP_${sym}_USDC`);
-      rate = data?.data?.rate || 0;
+      rate = data?.data?.est_funding_rate || data?.data?.rate || 0;
     }catch(e){rate=0}
     const annual = rate * 24 * 365 * 100;
     const intensity = Math.min(Math.abs(annual)/50,1); // cap
@@ -380,9 +384,9 @@ async function loadEco(){
     fetchJSON('https://api-evm.orderly.org/v1/public/chain_info'),
     fetchJSON('https://api-evm.orderly.org/v1/public/volume/stats')
   ]);
-  animateNum('dexCount', dex?.data?.length||0);
-  animateNum('pairCount', info?.data?.length||0);
-  animateNum('chainCount', chains?.data?.length||0);
+  animateNum('dexCount', dex?.data?.rows?.length||0);
+  animateNum('pairCount', info?.data?.rows?.length||0);
+  animateNum('chainCount', chains?.data?.rows?.length||0);
   animateNum('allTimeVol', vol?.data?.perp_volume_ltd||0, true);
 }
 
@@ -400,14 +404,19 @@ function animateNum(id, value, moneyFmt=false){
 
 async function refreshAll(){
   document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
-  loadHeader();
-  loadWhales();
-  loadDaily();
-  loadPnL();
-  loadChains();
-  loadBuilders();
-  loadFunding();
-  loadEco();
+  const safe = fn => fn().catch(e=>console.warn(fn.name, e.message));
+  // Stagger calls to avoid rate limits
+  await safe(loadHeader);
+  await safe(loadEco);
+  await sleep(500);
+  await safe(loadDaily);
+  await safe(loadPnL);
+  await sleep(500);
+  await safe(loadChains);
+  await safe(loadWhales);
+  // These are slow (sequential with delays) — run last
+  safe(loadFunding);
+  safe(loadBuilders);
 }
 
 refreshAll();
