@@ -52,6 +52,8 @@ h1 { color: #a78bfa; font-size: 1.4em; margin-bottom: 4px; }
   <div class="stat"><div class="stat-num" id="posted-count">0</div><div class="stat-label">POSTED</div></div>
 </div>
 
+<div id="daily-data" style="margin-bottom: 24px;"></div>
+
 <div id="content"></div>
 
 <div class="reply-section">
@@ -204,6 +206,48 @@ function removeImage(i) {
 }
 
 render();
+
+// Load daily data-driven tweets
+fetch('daily-tweets.json?' + Date.now())
+  .then(r => r.json())
+  .then(data => {
+    const el = document.getElementById('daily-data');
+    if (!data.tweets || !data.tweets.length) { el.innerHTML = ''; return; }
+    const DAILY_KEY = 'orderly-daily-' + data.date;
+    let dState = {};
+    try { dState = JSON.parse(localStorage.getItem(DAILY_KEY)) || {}; } catch {}
+    function saveDailyState() { localStorage.setItem(DAILY_KEY, JSON.stringify(dState)); }
+
+    function renderDaily() {
+      let html = `<div style="margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center;">
+        <h2 style="color: #10b981; font-size: 1.1em;">📊 Daily Data Tweets — ${data.date}</h2>
+        <span style="color: #666; font-size: 0.8em;">${data.source || 'Live API data'}</span>
+      </div>`;
+      data.tweets.forEach((t, i) => {
+        const posted = dState[i] ? 'posted' : '';
+        html += `
+          <div class="tweet-card ${posted}" id="daily-card-${i}">
+            <div class="slot-label" style="color: #10b981;">${t.slot || 'Data Tweet #' + (i+1)}</div>
+            <div class="tweet-text">${t.text}</div>
+            ${t.reply ? `<div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #1e1e3a;">
+              <div class="slot-label" style="color: #666;">↩️ Reply / Thread</div>
+              <div class="tweet-text" style="color: #888;">${t.reply}</div>
+              <div class="actions"><button class="btn btn-copy" onclick="navigator.clipboard.writeText(this.closest('.tweet-card').querySelectorAll('.tweet-text')[1].textContent);this.textContent='Copied!';this.classList.add('copied');setTimeout(()=>{this.textContent='Copy Reply';this.classList.remove('copied')},1500)">Copy Reply</button></div>
+            </div>` : ''}
+            <div class="actions">
+              <button class="btn btn-copy" onclick="navigator.clipboard.writeText(${JSON.stringify(JSON.stringify(t.text))});this.textContent='Copied!';this.classList.add('copied');setTimeout(()=>{this.textContent='Copy';this.classList.remove('copied')},1500)">Copy</button>
+              <button class="btn btn-posted ${dState[i] ? 'is-posted' : ''}" onclick="dState[${i}]=!dState[${i}];saveDailyState();renderDaily();">${dState[i] ? '✓ Posted' : 'Mark Posted'}</button>
+            </div>
+          </div>`;
+      });
+      el.innerHTML = html;
+    }
+    window.dState = dState;
+    window.saveDailyState = saveDailyState;
+    window.renderDaily = renderDaily;
+    renderDaily();
+  })
+  .catch(() => { document.getElementById('daily-data').innerHTML = '<p style="color:#666;font-size:0.85em;">No daily data tweets yet. They generate at 7AM SAST.</p>'; });
 </script>
 </body>
 </html>
