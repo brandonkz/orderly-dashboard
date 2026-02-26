@@ -1,0 +1,30 @@
+{
+  "date": "2026-02-26",
+  "source": "Live Orderly API data",
+  "tweets": [
+    {
+      "slot": "Trader Spotlight",
+      "text": "A Raydium trader is short 24.8 BTC ($1.7M) on Orderly with a Solana wallet.\n\nEntry: $62,950. Current: $68,540.\n\nSitting on -$138K unrealized. That's conviction.",
+      "reply": "Verify on-chain: https://dashboard.orderly.network/address/QTExNEV0YW1UY0Z3c25wSmt4UWczckdXb21mUEVSMnVaNzZ0MkhiR210QlU?broker_id=raydium&tab=positions"
+    },
+    {
+      "slot": "Bonus: BNB Short",
+      "text": "Someone shorted 250 BNB at $1,029 via WooFi Pro on Orderly.\n\nBNB is now $630.\n\n+$99K unrealized profit. Still holding the position.",
+      "reply": "Verify: https://dashboard.orderly.network/address/MHhmYzBiNjM0MmRmMjhmYTA1OGZjMjA3YTFlYTUwNGJjNTY0YzM2MzE0?broker_id=woofi_pro&tab=positions"
+    },
+    {
+      "slot": "Bonus: PUMP Bag",
+      "text": "267M PUMP tokens longed through Raydium on Orderly. $498K position.\n\nUnrealized PnL: -$1.03M.\n\nEntry was $0.00575. Current price: $0.00187. Down 67% and holding.",
+      "reply": "That's a Solana wallet too. Verify: https://dashboard.orderly.network/address/NHFFanFHYVFRemliNkhjckhLa1VlWTFUUEZnMjlwZlpxRktqWWIxZmdZQzI?broker_id=raydium&tab=positions"
+    },
+    {
+      "slot": "Bonus: Solana SOL Long",
+      "text": "A Solana-native trader longed 1,998 SOL ($177K) via Raydium on Orderly.\n\nEntry: $75.63. Current: $88.70.\n\n+$26K unrealized. SOL believers eating.",
+      "reply": "Verify: https://dashboard.orderly.network/address/REJmaEVFS25GVnpYaFZOb0R1NGFZZzlnTnlrV2NncUVYYTJpbkRNcGgxa3I?broker_id=raydium&tab=positions"
+    },
+    {
+      "slot": "Bonus: SPX500 On-Chain",
+      "text": "Traders are longing and shorting SPX500 perps on Orderly.\n\nOne Raydium trader is short 22.4 contracts ($155K). Another is long 22.6 ($157K).\n\nStock index futures, fully on-chain. No TradFi account needed."
+    }
+  ]
+}
