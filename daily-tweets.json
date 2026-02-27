@@ -1,30 +1,31 @@
 {
-  "date": "2026-02-26",
+  "date": "2026-02-27",
   "source": "Live Orderly API data",
   "tweets": [
     {
       "slot": "Trader Spotlight",
-      "text": "A Raydium trader is short 24.8 BTC ($1.7M) on Orderly with a Solana wallet.\n\nEntry: $62,950. Current: $68,540.\n\nSitting on -$138K unrealized. That's conviction.",
+      "text": "A Solana trader on @RaydiumProtocol is shorting $1.67M of BTC on Orderly right now.\n\nAverage entry: $62,950\nBTC price: $67,740\nUnrealized loss: -$117,691\n\nHolding 24.7 BTC short through the pain. Diamond hands or rekt incoming?",
       "reply": "Verify on-chain: https://dashboard.orderly.network/address/QTExNEV0YW1UY0Z3c25wSmt4UWczckdXb21mUEVSMnVaNzZ0MkhiR210QlU?broker_id=raydium&tab=positions"
     },
     {
-      "slot": "Bonus: BNB Short",
-      "text": "Someone shorted 250 BNB at $1,029 via WooFi Pro on Orderly.\n\nBNB is now $630.\n\n+$99K unrealized profit. Still holding the position.",
+      "slot": "Bonus: PUMP Degen",
+      "text": "Someone bought 267M $PUMP tokens at $0.00575 average.\n\nCurrent price: $0.0019\nUnrealized loss: -$1,025,574\n\nOver a million dollars underwater on a memecoin perp. This is the most commitment to PUMP we've ever seen on Orderly.",
+      "reply": "Position held via @RaydiumProtocol on Orderly. That's a $510k position with a $1M drawdown. Verify: https://dashboard.orderly.network/address/NHFFanFHYVFRemliNkhjckhLa1VlWTFUUEZnMjlwZlpxRktqWWIxZmdZQzI?broker_id=raydium&tab=positions"
+    },
+    {
+      "slot": "Bonus: BNB Short King",
+      "text": "A WooFi Pro trader shorted 250 BNB at an average entry of $1,029.\n\nBNB is now $631.\n\nUnrealized profit: +$99,504\n\nThat's a 63% move captured. Still holding the full position.",
       "reply": "Verify: https://dashboard.orderly.network/address/MHhmYzBiNjM0MmRmMjhmYTA1OGZjMjA3YTFlYTUwNGJjNTY0YzM2MzE0?broker_id=woofi_pro&tab=positions"
     },
     {
-      "slot": "Bonus: PUMP Bag",
-      "text": "267M PUMP tokens longed through Raydium on Orderly. $498K position.\n\nUnrealized PnL: -$1.03M.\n\nEntry was $0.00575. Current price: $0.00187. Down 67% and holding.",
-      "reply": "That's a Solana wallet too. Verify: https://dashboard.orderly.network/address/NHFFanFHYVFRemliNkhjckhLa1VlWTFUUEZnMjlwZlpxRktqWWIxZmdZQzI?broker_id=raydium&tab=positions"
-    },
-    {
-      "slot": "Bonus: Solana SOL Long",
-      "text": "A Solana-native trader longed 1,998 SOL ($177K) via Raydium on Orderly.\n\nEntry: $75.63. Current: $88.70.\n\n+$26K unrealized. SOL believers eating.",
-      "reply": "Verify: https://dashboard.orderly.network/address/REJmaEVFS25GVnpYaFZOb0R1NGFZZzlnTnlrV2NncUVYYTJpbkRNcGgxa3I?broker_id=raydium&tab=positions"
-    },
-    {
       "slot": "Bonus: SPX500 On-Chain",
-      "text": "Traders are longing and shorting SPX500 perps on Orderly.\n\nOne Raydium trader is short 22.4 contracts ($155K). Another is long 22.6 ($157K).\n\nStock index futures, fully on-chain. No TradFi account needed."
+      "text": "Traders are shorting SPX500 on-chain through Orderly.\n\nOne Solana wallet via @RaydiumProtocol has a $154k short on SPX500 perps. Entry: $6,879. Current: $6,883.\n\nStock index perps, settled on-chain. This is what we built for.",
+      "reply": "Orderly offers perps on XAU, XAG, SPX500, NAS100 and more. All on-chain, all cross-margined. https://dashboard.orderly.network/address/MHgwODNjNzk5NDY2ZDNkN2M0M2I0NjhlMjFiNWFkOWVlMDFlYTU4N2U2?broker_id=raydium&tab=positions"
+    },
+    {
+      "slot": "Bonus: Aden BTC Bull",
+      "text": "An Aden trader went long 4.35 BTC at $91,685 average.\n\nBTC is now $67,740.\n\nUnrealized loss: -$104,405\n\nBought the top and still holding. Either the ultimate conviction play or a lesson in stop losses.",
+      "reply": "Verify: https://dashboard.orderly.network/address/MHg3MmVkNGQzODk2OGMzNDRmNDM0ZTEyZjFjYTM2NTI5Y2Y4ZTc5ZTE0?broker_id=aden&tab=positions"
     }
   ]
 }
