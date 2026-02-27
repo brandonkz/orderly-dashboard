@@ -1,31 +1,60 @@
 {
   "date": "2026-02-27",
-  "source": "Live Orderly API data",
+  "source": "Live Orderly API data + evergreen MCP content",
   "tweets": [
     {
-      "slot": "Trader Spotlight",
-      "text": "A Solana trader on @RaydiumProtocol is shorting $1.67M of BTC on Orderly right now.\n\nAverage entry: $62,950\nBTC price: $67,740\nUnrealized loss: -$117,691\n\nHolding 24.7 BTC short through the pain. Diamond hands or rekt incoming?",
-      "reply": "Verify on-chain: https://dashboard.orderly.network/address/QTExNEV0YW1UY0Z3c25wSmt4UWczckdXb21mUEVSMnVaNzZ0MkhiR210QlU?broker_id=raydium&tab=positions"
+      "slot": "Saturday Morning — Funding Rate",
+      "scheduledFor": "2026-02-28 09:00 SAST",
+      "text": "SOL funding rate on Orderly: -233% annualized.\n\nShorts are paying longs 233% APY to hold the position open.\n\nThat's not a typo. That's the perp market screaming.",
+      "reply": "Track all funding rates live: defiyield.live"
     },
     {
-      "slot": "Bonus: PUMP Degen",
-      "text": "Someone bought 267M $PUMP tokens at $0.00575 average.\n\nCurrent price: $0.0019\nUnrealized loss: -$1,025,574\n\nOver a million dollars underwater on a memecoin perp. This is the most commitment to PUMP we've ever seen on Orderly.",
-      "reply": "Position held via @RaydiumProtocol on Orderly. That's a $510k position with a $1M drawdown. Verify: https://dashboard.orderly.network/address/NHFFanFHYVFRemliNkhjckhLa1VlWTFUUEZnMjlwZlpxRktqWWIxZmdZQzI?broker_id=raydium&tab=positions"
+      "slot": "Saturday Afternoon — Orderbook",
+      "scheduledFor": "2026-02-28 15:00 SAST",
+      "text": "266 DEXs built on Orderly's orderbook.\n\nNone of them had to bootstrap liquidity.\n\nThey just plugged in.",
+      "reply": "orderly.network"
     },
     {
-      "slot": "Bonus: BNB Short King",
-      "text": "A WooFi Pro trader shorted 250 BNB at an average entry of $1,029.\n\nBNB is now $631.\n\nUnrealized profit: +$99,504\n\nThat's a 63% move captured. Still holding the full position.",
-      "reply": "Verify: https://dashboard.orderly.network/address/MHhmYzBiNjM0MmRmMjhmYTA1OGZjMjA3YTFlYTUwNGJjNTY0YzM2MzE0?broker_id=woofi_pro&tab=positions"
+      "slot": "Sunday Morning — XAU Perps",
+      "scheduledFor": "2026-03-01 09:00 SAST",
+      "text": "You can short gold on-chain.\n\nNo broker. No KYC. No custody risk.\n\nXAU perps on Orderly. Same gold. No middleman.",
+      "reply": "orderly.network"
     },
     {
-      "slot": "Bonus: SPX500 On-Chain",
-      "text": "Traders are shorting SPX500 on-chain through Orderly.\n\nOne Solana wallet via @RaydiumProtocol has a $154k short on SPX500 perps. Entry: $6,879. Current: $6,883.\n\nStock index perps, settled on-chain. This is what we built for.",
-      "reply": "Orderly offers perps on XAU, XAG, SPX500, NAS100 and more. All on-chain, all cross-margined. https://dashboard.orderly.network/address/MHgwODNjNzk5NDY2ZDNkN2M0M2I0NjhlMjFiNWFkOWVlMDFlYTU4N2U2?broker_id=raydium&tab=positions"
+      "slot": "Sunday Afternoon — Scale",
+      "scheduledFor": "2026-03-01 15:00 SAST",
+      "text": "$186 billion in volume.\n\nNot a CEX. Not a single app.\n\n266 DEXs. 18 chains. One orderbook.",
+      "reply": "orderly.network"
     },
     {
-      "slot": "Bonus: Aden BTC Bull",
-      "text": "An Aden trader went long 4.35 BTC at $91,685 average.\n\nBTC is now $67,740.\n\nUnrealized loss: -$104,405\n\nBought the top and still holding. Either the ultimate conviction play or a lesson in stop losses.",
-      "reply": "Verify: https://dashboard.orderly.network/address/MHg3MmVkNGQzODk2OGMzNDRmNDM0ZTEyZjFjYTM2NTI5Y2Y4ZTc5ZTE0?broker_id=aden&tab=positions"
+      "slot": "MCP — Contrast",
+      "scheduledFor": "flexible",
+      "text": "Most protocols: \"Here are our docs.\"\n\nOrderly: \"Here's an MCP server. Ask your AI to build the thing.\"\n\ngithub.com/OrderlyNetwork/orderly-mcp",
+      "reply": null
+    },
+    {
+      "slot": "MCP — What You Can Build",
+      "scheduledFor": "flexible",
+      "text": "What can you build with Orderly's MCP?\n\n- Perp DEX with live orderbook\n- Portfolio tracker with PnL history\n- Liquidation alert bot\n- Funding rate arbitrage scanner\n- Copy trading dashboard\n\nAll from a single AI prompt.",
+      "reply": "github.com/OrderlyNetwork/orderly-mcp"
+    },
+    {
+      "slot": "MCP — 7 Tools",
+      "scheduledFor": "flexible",
+      "text": "The Orderly MCP server has 7 tools.\n\nSearch docs. Get SDK patterns. Lookup contracts. Explain workflows. Query the API. Pull indexer rankings. Generate component guides.\n\nYour AI assistant now has the blueprints.",
+      "reply": "github.com/OrderlyNetwork/orderly-mcp"
+    },
+    {
+      "slot": "MCP — AI Native Infra",
+      "scheduledFor": "flexible",
+      "text": "We gave Claude access to our MCP server.\n\nIt built a working trading dashboard in one prompt.\n\nLive orderbook. Position management. Real-time PnL.\n\nThis is what AI-native infra looks like.",
+      "reply": "github.com/OrderlyNetwork/orderly-mcp"
+    },
+    {
+      "slot": "MCP — Ship in Hours",
+      "scheduledFor": "flexible",
+      "text": "Point Cursor at the Orderly MCP server.\n\nType: \"Build me a perp DEX with live orderbook and position management.\"\n\nIt knows every SDK hook, every contract, every API endpoint.\n\nYou ship in hours, not months.",
+      "reply": "github.com/OrderlyNetwork/orderly-mcp"
     }
   ]
 }
