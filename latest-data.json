@@ -1,0 +1,372 @@
+{
+  "ts": "2026-02-27T06:00:03.851Z",
+  "volume": {
+    "today": 6012318.239722,
+    "7d": 256742916.954889,
+    "30d": 1784516304.56297,
+    "ytd": 73140631704.94331,
+    "allTime": 185961266959.6411
+  },
+  "daily": [
+    {
+      "date": "2026-02-21",
+      "volume": 19248937.443584,
+      "fees": 3713.234472,
+      "trades": 42600,
+      "users": 5555,
+      "liquidations": 74,
+      "liquidationAmount": 552659.507556,
+      "newPositions": 7093
+    },
+    {
+      "date": "2026-02-22",
+      "volume": 16878990.464852,
+      "fees": 3207.683276,
+      "trades": 42640,
+      "users": 5542,
+      "liquidations": 56,
+      "liquidationAmount": 97320.015662,
+      "newPositions": 7455
+    },
+    {
+      "date": "2026-02-23",
+      "volume": 51239059.021365,
+      "fees": 8584.817044,
+      "trades": 117046,
+      "users": 8076,
+      "liquidations": 360,
+      "liquidationAmount": 1059743.376142,
+      "newPositions": 23555
+    },
+    {
+      "date": "2026-02-24",
+      "volume": 49403288.553155,
+      "fees": 8146.067164,
+      "trades": 112390,
+      "users": 7184,
+      "liquidations": 182,
+      "liquidationAmount": 553523.012428,
+      "newPositions": 17255
+    },
+    {
+      "date": "2026-02-25",
+      "volume": 53224039.427103,
+      "fees": 9033.431457,
+      "trades": 163258,
+      "users": 8652,
+      "liquidations": 410,
+      "liquidationAmount": 1821410.632172,
+      "newPositions": 36262
+    },
+    {
+      "date": "2026-02-26",
+      "volume": 29918605.913426,
+      "fees": 5287.180677,
+      "trades": 85252,
+      "users": 7666,
+      "liquidations": 166,
+      "liquidationAmount": 513747.553652,
+      "newPositions": 16241
+    },
+    {
+      "date": "2026-02-27",
+      "volume": 6590732.097798,
+      "fees": 1224.632944,
+      "trades": 27611,
+      "users": 1648,
+      "liquidations": 22,
+      "liquidationAmount": 119143.085072,
+      "newPositions": 6297
+    }
+  ],
+  "dailySummary": {
+    "avgUsers": 6332,
+    "peakUsers": 8652,
+    "peakDay": "2026-02-25",
+    "totalTrades7d": 590797,
+    "totalLiquidations7d": 1270
+  },
+  "topTradersByVolume": [
+    {
+      "address": "0x4f0199c5...",
+      "volume": 308230466.15
+    },
+    {
+      "address": "0x29b9b40f...",
+      "volume": 218385983.97
+    },
+    {
+      "address": "0x2f612b11...",
+      "volume": 194341053.76
+    },
+    {
+      "address": "0x960c5ce8...",
+      "volume": 138604069.97
+    },
+    {
+      "address": "0x8e0e4785...",
+      "volume": 125511858.48
+    },
+    {
+      "address": "0x0d474362...",
+      "volume": 118570384.13
+    },
+    {
+      "address": "0xc4390ebc...",
+      "volume": 106325906.75
+    },
+    {
+      "address": "0xaeb1c282...",
+      "volume": 102325555.1
+    },
+    {
+      "address": "0xa0631d1a...",
+      "volume": 99897360.99
+    },
+    {
+      "address": "0x94a758d5...",
+      "volume": 89702357.17
+    }
+  ],
+  "topPnlTraders": [
+    {
+      "address": "0x8baa309d93fffb54a64444fd98e10d92d4d9eb22",
+      "broker": "orderly",
+      "totalPnl": 8557127.18814381,
+      "symbols": [
+        "ETH",
+        "BTC",
+        "SOL",
+        "PUMP",
+        "XPL",
+        "XRP",
+        "LINK",
+        "SEI",
+        "BIO",
+        "ENA",
+        "IP"
+      ]
+    },
+    {
+      "address": "0x32831ca2efa20ae6340224bc353d4b241b3d2541",
+      "broker": "woofi_pro",
+      "totalPnl": 2649216.210766,
+      "symbols": [
+        "BTC",
+        "ETH"
+      ]
+    },
+    {
+      "address": "C24tFSBCTi8tkjpME8nDArjPxjVXz2PozApPT9bfKj2F",
+      "broker": "raydium",
+      "totalPnl": 1468359.247903,
+      "symbols": [
+        "PUMP",
+        "ETH",
+        "SOL",
+        "AVAX"
+      ]
+    },
+    {
+      "address": "0x689881d3a1cf1b9863be7ff05c7af8e464c248d0",
+      "broker": "woofi_pro",
+      "totalPnl": 1357268.22211,
+      "symbols": [
+        "ETH"
+      ]
+    },
+    {
+      "address": "0x09d4a16aaf56c19410460db47014e57b6f7cdaa7",
+      "broker": "woofi_pro",
+      "totalPnl": 1157010.456,
+      "symbols": [
+        "ETH",
+        "BTC",
+        "SOL"
+      ]
+    }
+  ],
+  "biggestPositions": [
+    {
+      "address": "A114EtamTcFwsnpJkxQg3rGWomfPER2uZ76t2HbGmtBU",
+      "symbol": "BTC",
+      "holding": -24.7777,
+      "broker": "raydium"
+    },
+    {
+      "address": "4qEjqGaQQzib6HcrHKkUeY1TPFg29pfZqFKjYb1fgYC2",
+      "symbol": "PUMP",
+      "holding": 267231760,
+      "broker": "raydium"
+    },
+    {
+      "address": "0xfa50e72b0b9c7fbfe694c726f0f05b115bc0699c",
+      "symbol": "XAU",
+      "holding": -93.8665,
+      "broker": "orderly"
+    },
+    {
+      "address": "0x8baa309d93fffb54a64444fd98e10d92d4d9eb22",
+      "symbol": "BTC",
+      "holding": 6.53737,
+      "broker": "orderly"
+    },
+    {
+      "address": "0x8baa309d93fffb54a64444fd98e10d92d4d9eb22",
+      "symbol": "ETH",
+      "holding": -202.1498,
+      "broker": "orderly"
+    }
+  ],
+  "ecosystem": {
+    "totalDEXs": 266,
+    "totalPairs": 98,
+    "totalChains": 18
+  },
+  "topBuilders": [
+    {
+      "name": "Orderly",
+      "id": "orderly",
+      "week": 377965710.574296,
+      "month": 2542938461.015409,
+      "allTime": 222335829426.02365
+    },
+    {
+      "name": "WOOFi Pro",
+      "id": "woofi_pro",
+      "week": 6325462.386954,
+      "month": 72832442.33575,
+      "allTime": 59488800716.18531
+    },
+    {
+      "name": "vooi.io",
+      "id": "vooi",
+      "week": 62637.662055,
+      "month": 15831481.123738,
+      "allTime": 9824026618.569675
+    },
+    {
+      "name": "LogX",
+      "id": "logx",
+      "week": 11143.51543,
+      "month": 9468184.706032,
+      "allTime": 14343374683.00584
+    },
+    {
+      "name": "Sharpe AI",
+      "id": "sharpe_ai",
+      "week": 505.999212,
+      "month": 7033.084712,
+      "allTime": 487655657.082739
+    }
+  ],
+  "chainDeposits": [
+    {
+      "chain": "Solana",
+      "tvl": 9594376.218153194
+    },
+    {
+      "chain": "Arbitrum",
+      "tvl": 1750140.3344584499
+    },
+    {
+      "chain": "Abstract",
+      "tvl": 1449721.709460125
+    },
+    {
+      "chain": "Binance",
+      "tvl": 912363.8436150097
+    },
+    {
+      "chain": "Ethereum",
+      "tvl": 652594.8548183911
+    },
+    {
+      "chain": "Berachain",
+      "tvl": 415775.79405578884
+    },
+    {
+      "chain": "Near",
+      "tvl": 251426.95473537844
+    },
+    {
+      "chain": "Base",
+      "tvl": 245411.43019461518
+    },
+    {
+      "chain": "Optimism",
+      "tvl": 189032.28964952307
+    },
+    {
+      "chain": "Story",
+      "tvl": 186719.43120075736
+    },
+    {
+      "chain": "Avalanche",
+      "tvl": 153518.09257840767
+    },
+    {
+      "chain": "Mode",
+      "tvl": 132733.84432119917
+    },
+    {
+      "chain": "Polygon",
+      "tvl": 132384.46175584738
+    },
+    {
+      "chain": "Sei",
+      "tvl": 102696.82179674938
+    },
+    {
+      "chain": "Sonic",
+      "tvl": 50985.250553041195
+    },
+    {
+      "chain": "Mantle",
+      "tvl": 43030.528825392605
+    },
+    {
+      "chain": "Morph",
+      "tvl": 974.7754693593068
+    },
+    {
+      "chain": "Plume",
+      "tvl": 0
+    }
+  ],
+  "totalTVL": 16263886.635641228,
+  "fundingRates": {
+    "BTC": {
+      "rate": -0.00015999,
+      "rateAnnualized": "-140.2%"
+    },
+    "ETH": {
+      "rate": 0.0001,
+      "rateAnnualized": "87.6%"
+    },
+    "SOL": {
+      "rate": -0.00022899,
+      "rateAnnualized": "-200.6%"
+    },
+    "XAU": {
+      "rate": 0.00005,
+      "rateAnnualized": "43.8%"
+    },
+    "XAG": {
+      "rate": 0.00005,
+      "rateAnnualized": "43.8%"
+    },
+    "TSLA": {
+      "rate": 0.0001,
+      "rateAnnualized": "87.6%"
+    },
+    "NVDA": {
+      "rate": 0.0001,
+      "rateAnnualized": "87.6%"
+    }
+  },
+  "orderToken": {
+    "price": 0.05582,
+    "change24h": -1.1904231617967531
+  }
+}
