@@ -1,60 +1,23 @@
 {
-  "date": "2026-02-27",
-  "source": "Live Orderly API data + evergreen MCP content",
-  "tweets": [
-    {
-      "slot": "Saturday Morning — Funding Rate",
-      "scheduledFor": "2026-02-28 09:00 SAST",
-      "text": "SOL funding rate on Orderly: -233% annualized.\n\nShorts are paying longs 233% APY to hold the position open.\n\nThat's not a typo. That's the perp market screaming.",
-      "reply": "Track all funding rates live: defiyield.live"
-    },
-    {
-      "slot": "Saturday Afternoon — Orderbook",
-      "scheduledFor": "2026-02-28 15:00 SAST",
-      "text": "266 DEXs built on Orderly's orderbook.\n\nNone of them had to bootstrap liquidity.\n\nThey just plugged in.",
-      "reply": "orderly.network"
-    },
-    {
-      "slot": "Sunday Morning — XAU Perps",
-      "scheduledFor": "2026-03-01 09:00 SAST",
-      "text": "You can short gold on-chain.\n\nNo broker. No KYC. No custody risk.\n\nXAU perps on Orderly. Same gold. No middleman.",
-      "reply": "orderly.network"
-    },
-    {
-      "slot": "Sunday Afternoon — Scale",
-      "scheduledFor": "2026-03-01 15:00 SAST",
-      "text": "$186 billion in volume.\n\nNot a CEX. Not a single app.\n\n266 DEXs. 18 chains. One orderbook.",
-      "reply": "orderly.network"
-    },
-    {
-      "slot": "MCP — Contrast",
-      "scheduledFor": "flexible",
-      "text": "Most protocols: \"Here are our docs.\"\n\nOrderly: \"Here's an MCP server. Ask your AI to build the thing.\"\n\ngithub.com/OrderlyNetwork/orderly-mcp",
-      "reply": null
-    },
-    {
-      "slot": "MCP — What You Can Build",
-      "scheduledFor": "flexible",
-      "text": "What can you build with Orderly's MCP?\n\n- Perp DEX with live orderbook\n- Portfolio tracker with PnL history\n- Liquidation alert bot\n- Funding rate arbitrage scanner\n- Copy trading dashboard\n\nAll from a single AI prompt.",
-      "reply": "github.com/OrderlyNetwork/orderly-mcp"
-    },
-    {
-      "slot": "MCP — 7 Tools",
-      "scheduledFor": "flexible",
-      "text": "The Orderly MCP server has 7 tools.\n\nSearch docs. Get SDK patterns. Lookup contracts. Explain workflows. Query the API. Pull indexer rankings. Generate component guides.\n\nYour AI assistant now has the blueprints.",
-      "reply": "github.com/OrderlyNetwork/orderly-mcp"
-    },
-    {
-      "slot": "MCP — AI Native Infra",
-      "scheduledFor": "flexible",
-      "text": "We gave Claude access to our MCP server.\n\nIt built a working trading dashboard in one prompt.\n\nLive orderbook. Position management. Real-time PnL.\n\nThis is what AI-native infra looks like.",
-      "reply": "github.com/OrderlyNetwork/orderly-mcp"
-    },
-    {
-      "slot": "MCP — Ship in Hours",
-      "scheduledFor": "flexible",
-      "text": "Point Cursor at the Orderly MCP server.\n\nType: \"Build me a perp DEX with live orderbook and position management.\"\n\nIt knows every SDK hook, every contract, every API endpoint.\n\nYou ship in hours, not months.",
-      "reply": "github.com/OrderlyNetwork/orderly-mcp"
-    }
-  ]
+  "date": "2026-02-28",
+  "source": "live-positions-api",
+  "story": "267M PUMP long position -$1.04M underwater via Raydium on Orderly",
+  "main_tweet": {
+    "text": "A trader on Orderly is holding 267M $PUMP tokens long. Entry: $0.00575. Mark: $0.00184. That's $1.04M underwater on a single memecoin perp.",
+    "scheduled": "2026-02-28T11:00:00+02:00"
+  },
+  "reply_tweet": {
+    "text": "Verify the position on-chain 👇\nhttps://dashboard.orderly.network/address/NHFFanFHYVFRemliNkhjckhLa1VlWTFUUEZnMjlwZlpxRktqWWIxZmdZQzI?broker_id=raydium&tab=positions",
+    "scheduled": "2026-02-28T11:01:00+02:00"
+  },
+  "position_data": {
+    "wallet": "4qEjqGaQQzib6HcrHKkUeY1TPFg29pfZqFKjYb1fgYC2",
+    "broker": "raydium",
+    "symbol": "PERP_PUMP_USDC",
+    "holding": "267231760",
+    "entry_price": "0.00575077",
+    "mark_price": "0.001837",
+    "unrealized_pnl": "-1045883.65",
+    "holding_value": "490637.51"
+  }
 }
